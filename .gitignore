@@ -1,0 +1,8 @@
+# 指定文件夹
+dist/
+node_modules/
+
+# 指定文件
+package-lock.json
+*.csv
+*.sql

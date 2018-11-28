@@ -1,0 +1,32 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-console":"warn",
+        "no-debugger":"warn",
+        "no-alert":"error",//禁止alert
+        "one-var":"off",
+        "no-var":"error",//不使用var
+        "no-multi-spaces":"warn",//禁止多余的空格
+        "space-infix-ops":"error",//一元操作符前后需要空格
+        "array-bracket-spacing":"error",//数组定义，需要在逗号后面加空格
+        "arrow-spacing":["error",{ "before": true, "after": true }],//箭头函数前后加空格
+        "no-confusing-arrow":"error",
+        "no-label-var":"error", //不能使用var
+        "semi":["warn","never"], //句尾不要分号
+        "block-spacing":"warn",//单行块级元素需要在前后添加空格
+        "comma-spacing":"warn",//逗号后面加空格
+        "computed-property-spacing":"warn",//[]获取属性时内部不能加空格
+        "func-call-spacing":"warn",//函数调用时之间不能有空格
+        "key-spacing":["warn",{"beforeColon":false,"afterColon":true}],//对象键值对后面要有空格
+        "keyword-spacing":["warn",{"before":true,"after":true}],//关键词前后要有空格
+        "space-unary-ops":["warn",{"words":true,"nonwords":false}],//一些一元运算需要前后加空格
+        "indent":["warn", 4, {"SwitchCase": 1}],//4个空格缩进
+        "quotes":["error", "double", {"allowTemplateLiterals": true}]//必须双引号，允许反勾号
+    },
+    "env": {//环境
+        "node": true
+    }
+}
