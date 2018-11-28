@@ -4,6 +4,7 @@
         "build": "cross-env NODE_ENV=production webpack --inline --progress --config build/webpack.config.prod.js"
     },
     "dependencies": {
+        "d3": "5.7.0",
         "mariadb": "2.0.1-beta",
         "eslint": "5.9.0",
         "moment": "2.22.2",
