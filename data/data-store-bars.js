@@ -1,31 +1,18 @@
-const mariadb = require("mariadb")
-const DB_NAME = "internet_bar"
-
-const pool = mariadb.createPool({host: "127.0.0.1", port: 3306, user: "root", password: "root", database: DB_NAME, connectionLimit: 5})
-
 async function saveBarsData(bars) {
-    let conn
-    try {
-        conn = await pool.getConnection()
-        //清除表数据
-        await conn.query("TRUNCATE TABLE bars")
+    let barstr = bars.map(bar => {
+        return `INSERT INTO bars (id, name, longitude, latitude) VALUES ("${bar.id}", "${bar.name}", ${bar.longitude}, ${bar.latitude});`
+    }).join("\r\n")
 
-        for (let i = 0; i < bars.length; i++){
-            let bar = bars[i]
-            await conn.query("INSERT INTO bars (id, name, longitude, latitude) VALUES (?, ?, ?, ?)", [bar.id, bar.name, bar.longitude, bar.latitude])
-            console.log(`${i}/${bars.length}`)
+    fs.writeFile(path.resolve(__dirname, "./bars.sql"), barstr, (err, data) => {
+        if (err){
+            console.error(err)
+            reject(err)
         }
-    } catch (err) {
-        throw err
-    } finally {
-        if (conn) conn.end()
-        pool.end()
-        console.log("complete")
-    }
+        console.log("ok")
+    })
 }
 
 // asyncFunction()
-
 const fs = require("fs")
 const path = require("path")
 
@@ -72,5 +59,7 @@ fs.readFile(path.resolve(__dirname, "./bars.csv"), (err, data) => {
     })
     console.log("处理后：", bars.length)
 
-    saveBarsData(bars)
+    saveBarsData(bars).catch(err => {
+        console.error(err)
+    })
 })
