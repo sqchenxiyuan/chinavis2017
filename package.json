@@ -6,6 +6,8 @@
     "dependencies": {
         "axios": "0.18.0",
         "d3": "5.7.0",
+        "echarts": "4.2.0-rc.2",
+        "echarts-bmap": "1.0.3",
         "mysql": "2.16.0",
         "moment": "2.22.2",
         "es6-promisify": "6.0.1",
@@ -26,7 +28,9 @@
         "node-sass": "4.9.4",
         "autoprefixer": "9.3.0",
         "koa": "2.6.2",
-        "koa-router": "7.4.0"
+        "koa-router": "7.4.0",
+        "koa-static": "5.0.0",
+        "script-loader": "0.7.2"
     },
     "browserslist": {
         "production": [

@@ -6,11 +6,14 @@
         <title><%= htmlWebpackPlugin.options.title%></title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=jMGkClKpRLg5BqlnvaxPS418p3j505kL"></script>
-        <!-- <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
-        <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script> -->
-        <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/heatmap.js"></script>
+        <script type="text/javascript" src="./public/baidumap-geoutil.js"></script>
+        <script type="text/javascript" src="./public/echarts.min.js"></script>
+        <script type="text/javascript" src="./public/echarts-bmap.js"></script>
     </head>
     <body>
-        <div id="container" style="display: inline-block; width: 600px; height: 600px;"></div> 
+        <div id="container" style="position:relative; display: inline-block; width: 600px; height: 600px;"></div>
+        <button id="select">选择</button>
+        <button id="select-close">完成选择</button>
+        <button id="select-clear">清除选择</button>
     </body>
 </html>

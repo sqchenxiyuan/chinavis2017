@@ -1,6 +1,7 @@
 const webpackBaseConfig = require("./webpack.config.base.js")
 const webpack = require("webpack")
 const merge = require("webpack-merge")
+const path = require("path")
 
 module.exports = merge(webpackBaseConfig, {
     mode: "development",
@@ -15,9 +16,10 @@ module.exports = merge(webpackBaseConfig, {
     devServer: {
         historyApiFallback: {
             rewrites: [
-                { from: /.*/, to: "/public/index.html" },
+                { from: /index\.html/, to: "/public/index.html" },
             ],
         },
+        contentBase: path.resolve(__dirname, "../server"),
         stats: "normal",
         host: "0.0.0.0",
         port: 8080,

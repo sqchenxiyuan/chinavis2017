@@ -70,7 +70,7 @@
     "elementType": "geometry",
     "stylers": {
         "visibility": "on",
-        "weight": 4
+        "weight": 1
     }
 }, {
     "featureType": "highway",
@@ -113,7 +113,7 @@
     "elementType": "geometry",
     "stylers": {
         "visibility": "on",
-        "weight": 2
+        "weight": 1
     }
 }, {
     "featureType": "arterial",
@@ -311,18 +311,6 @@
         "color": "#ffffffff"
     }
 }, {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "districtlabel",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
     "featureType": "poilabel",
     "elementType": "labels",
     "stylers": {
@@ -333,5 +321,11 @@
     "elementType": "labels.icon",
     "stylers": {
         "visibility": "off"
+    }
+}, {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": {
+        "weight": 1
     }
 }]
