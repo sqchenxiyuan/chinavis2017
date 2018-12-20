@@ -4,6 +4,9 @@
         "build": "cross-env NODE_ENV=production webpack --inline --progress --config build/webpack.config.prod.js"
     },
     "dependencies": {
+        "eslint": "5.10.0",
+        "eslint-plugin-vue": "5.0.0",
+        "babel-eslint": "10.0.1",
         "axios": "0.18.0",
         "d3": "5.7.0",
         "echarts": "4.2.0-rc.2",
@@ -30,7 +33,12 @@
         "koa": "2.6.2",
         "koa-router": "7.4.0",
         "koa-static": "5.0.0",
-        "script-loader": "0.7.2"
+        "script-loader": "0.7.2",
+        "vue": "2.5.17",
+        "vue-router": "3.0.1",
+        "vuex": "3.0.1",
+        "vue-template-compiler": "2.5.17",
+        "vue-loader": "15.4.2"
     },
     "browserslist": {
         "production": [

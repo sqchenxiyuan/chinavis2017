@@ -1,6 +1,7 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const VueLoaderPlugin = require("vue-loader/lib/plugin")
 
 module.exports = {
     context: path.resolve(__dirname, "../"),
@@ -15,6 +16,10 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /.vue$/,
+                loader: "vue-loader"
+            },
             {
                 test: /\.js$/,
                 loader: "babel-loader?cacheDirectory=true",
@@ -45,6 +50,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             name: "index",
             filename: "index.html",
