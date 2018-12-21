@@ -117,6 +117,7 @@ export default {
                 div.removeEventListener("mouseup", mouseUp)
                 Polygon.setPath(path)
                 this.selelctOver()
+                this.selecting = false
             }
 
             function getPointByxy(x, y){

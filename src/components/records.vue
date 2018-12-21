@@ -4,6 +4,10 @@
 
 <script>
 import echarts from "echarts"
+import moment from "moment"
+import eventBus from "./eventbus.js"
+
+import { querySurfTheInternetRecords } from "../interfaces/bars.js"
 
 export default {
     data(){
@@ -11,19 +15,26 @@ export default {
             myChart: null
         }
     },
+    created(){
+        eventBus.$on("timeRangeChange", this.timeRangeUpdate)
+    },
     mounted(){
-        this.initData()
+        querySurfTheInternetRecords({
+            startTime: 1475251200,
+            endTime: 1482768000,
+            interval: 24 * 3600
+        }).then(res => {
+            let recordData = res.data
+            this.initData()
+            this.updateData(recordData)
+        })
     },
     methods: {
-        initData(){
+        initData(recordData){
             let myChart = echarts.init(this.$refs.records)
-            console.log(123)
             let option = {
                 tooltip: {
                     trigger: "axis"
-                },
-                legend: {
-                    data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"]
                 },
                 grid: {
                     left: "3%",
@@ -31,49 +42,116 @@ export default {
                     bottom: "3%",
                     containLabel: true
                 },
+                brush: {
+                    toolbox: ["lineX", "keep", "clear"],
+                    xAxisIndex: 0
+                },
+                dataZoom: [
+                    {
+                        show: true,
+                        realtime: true,
+                        start: 0,
+                        end: 100
+                    },
+                    {
+                        type: "inside",
+                        realtime: true,
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        type: "cross",
+                        animation: false,
+                        label: {
+                            backgroundColor: "#505765"
+                        }
+                    }
+                },
                 xAxis: {
                     type: "category",
                     boundaryGap: false,
-                    data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+                    data: []
                 },
                 yAxis: {
                     type: "value"
                 },
                 series: [
                     {
-                        name: "邮件营销",
                         type: "line",
-                        stack: "总量",
-                        data: [120, 132, 101, 134, 90, 230, 210]
-                    },
-                    {
-                        name: "联盟广告",
-                        type: "line",
-                        stack: "总量",
-                        data: [220, 182, 191, 234, 290, 330, 310]
-                    },
-                    {
-                        name: "视频广告",
-                        type: "line",
-                        stack: "总量",
-                        data: [150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name: "直接访问",
-                        type: "line",
-                        stack: "总量",
-                        data: [320, 332, 301, 334, 390, 330, 320]
-                    },
-                    {
-                        name: "搜索引擎",
-                        type: "line",
-                        stack: "总量",
-                        data: [820, 932, 901, 934, 1290, 1330, 1320]
+                        smooth: true,
+                        data: []
                     }
                 ]
             }
-
             myChart.setOption(option)
+
+            this.myChart = myChart
+        },
+        updateData(recordData){
+            let myChart = this.myChart
+            myChart.setOption({
+                dataZoom: [
+                    {
+                        show: true,
+                        realtime: true,
+                        start: 0,
+                        end: 100
+                    },
+                    {
+                        type: "inside",
+                        realtime: true,
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                xAxis: {
+                    type: "category",
+                    boundaryGap: false,
+                    data: recordData.map(record => moment(record.startTime * 1000).format("YYYY-MM-DD HH:mm:ss dddd"))
+                },
+                series: [
+                    {
+                        type: "line",
+                        smooth: true,
+                        data: recordData.map(record => record.count)
+                    }
+                ]
+            })
+        },
+        timeRangeUpdate(range){
+            let startTime = Math.floor(range.startTime / 1000)
+            let endTime = Math.floor(range.endTime / 1000)
+            let interval = 24 * 3600
+            
+            let timeWidth = endTime - startTime
+            let safeWidth = timeWidth / 40
+            if (safeWidth > 3600){
+                interval = Math.ceil(safeWidth / 3600) * 3600
+            } else if (safeWidth > 60){
+                interval = Math.ceil(safeWidth / 60) * 60
+            }
+            console.log(interval)
+
+            // if (endTime - startTime > 7 * 24 * 3600){
+            //     interval = 24 * 3600
+            // } else if (endTime - startTime > 24 * 3600){
+            //     interval = 3600
+            // } else {
+            //     interval = 600
+            // }
+            // console.log(endTime - startTime, interval)
+
+            querySurfTheInternetRecords({
+                startTime: startTime,
+                endTime: endTime,
+                interval: interval
+            }).then(res => {
+                let recordData = res.data
+                this.updateData(recordData)
+            })
         }
     }
 }

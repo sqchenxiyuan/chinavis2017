@@ -1,8 +1,15 @@
 import "./styles/common.scss"
+
+import moment from "moment"
+import "moment/locale/zh-cn"
+
 // import "script-loader!echarts/dist/echarts.min.js"
 // import "script-loader!echarts-bmap/dist/echarts-bmap.js"
 import echarts from "echarts"
 import "echarts/extension/bmap/bmap.js"
+
+import chinaMap from "echarts/map/json/china.json"
+echarts.registerMap("china", chinaMap)
 
 import Vue from "vue"
 

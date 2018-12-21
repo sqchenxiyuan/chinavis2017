@@ -9,7 +9,7 @@ let storeConfig = {
             return state.bars
         }
     },
-    mutations:{
+    mutations: {
         setBars(state, bars){
             state.bars = bars
         }

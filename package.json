@@ -4,6 +4,7 @@
         "build": "cross-env NODE_ENV=production webpack --inline --progress --config build/webpack.config.prod.js"
     },
     "dependencies": {
+        "moment": "2.22.2",
         "eslint": "5.10.0",
         "eslint-plugin-vue": "5.0.0",
         "babel-eslint": "10.0.1",
@@ -12,7 +13,6 @@
         "echarts": "4.2.0-rc.2",
         "echarts-bmap": "1.0.3",
         "mysql": "2.16.0",
-        "moment": "2.22.2",
         "es6-promisify": "6.0.1",
         "cross-env": "5.2.0",
         "webpack": "4.22.0",
