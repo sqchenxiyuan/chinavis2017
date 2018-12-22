@@ -122,10 +122,16 @@ export default {
             position: relative;
             flex: 6;
             display: flex;
-            flex-direction: column;
 
             .list-container, .statistics-container{
                 position: relative;
+            }
+
+            .list-container{
+                width: 150px;
+            }
+
+            .statistics-container{
                 flex: 1;
             }
         }
