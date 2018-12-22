@@ -8,7 +8,7 @@
                 <records></records>
             </div>
             <div class="time-selector-conatiner">
-                <timeselecter :startTime="1475251200000" :endTime="1482768000000" :minTime="24 * 3600 * 1000" @update="updateTime"></timeselecter>
+                <timeselecter :startTime="1475251200000" :endTime="1482768000000" :minTime="24 * 3600 * 1000"></timeselecter>
             </div>
         </div>
         <div class="center-container">
@@ -22,7 +22,12 @@
         </div>
         <div class="right-container">
             <div class="bars-conatiner">
-                <div style="positon: absolute; top: 0; left: 0;width:100%;height: 100%; background: red"></div>
+                <div class="list-container">
+                    <barsList></barsList>
+                </div>
+                <div class="statistics-container">
+                    <barsStatistics></barsStatistics>
+                </div>
             </div>
             <div class="others-conatiner">
                 <div class="person-time-heatmap" >
@@ -46,6 +51,8 @@ import records from "./components/records.vue"
 import timeselecter from "./components/timeselecter.vue"
 import personHeatmap from "./components/person-heatmap.vue"
 import personFromMap from "./components/person-from-map.vue"
+import barsList from "./components/bars-list.vue"
+import barsStatistics from "./components/bars-statistics.vue"
 
 export default {
     methods:{
@@ -54,9 +61,6 @@ export default {
         },
         clearSelect(){
             this.$refs.baidumap.clearSelect()
-        },
-        updateTime(range){
-            eventBus.$emit("timeRangeChange", range)
         }
     },
     components: {
@@ -64,7 +68,9 @@ export default {
         records,
         timeselecter,
         personHeatmap,
-        personFromMap
+        personFromMap,
+        barsList,
+        barsStatistics
     }
 }
 </script>
@@ -113,10 +119,19 @@ export default {
         flex-direction: column;
 
         .bars-conatiner{
+            position: relative;
             flex: 6;
+            display: flex;
+            flex-direction: column;
+
+            .list-container, .statistics-container{
+                position: relative;
+                flex: 1;
+            }
         }
 
         .others-conatiner{
+            position: relative;
             flex: 4;
             display: flex;
 

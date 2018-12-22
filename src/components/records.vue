@@ -12,11 +12,16 @@ import { querySurfTheInternetRecords } from "../interfaces/bars.js"
 export default {
     data(){
         return {
-            myChart: null
+            myChart: null,
+            range: {
+                startTime: 1475251200000,
+                endTime: 1482768000000
+            }
         }
     },
     created(){
-        eventBus.$on("timeRangeChange", this.timeRangeUpdate)
+        eventBus.$on("timeRangeUpdate", this.somethingsUpdate)
+        eventBus.$on("selectedBarsUpdate", this.somethingsUpdate)
     },
     mounted(){
         querySurfTheInternetRecords({
@@ -122,7 +127,8 @@ export default {
                 ]
             })
         },
-        timeRangeUpdate(range){
+        somethingsUpdate(){
+            let range = this.$store.getters.timeRange
             let startTime = Math.floor(range.startTime / 1000)
             let endTime = Math.floor(range.endTime / 1000)
             let interval = 24 * 3600
@@ -136,6 +142,14 @@ export default {
             }
             console.log(interval)
 
+            let bars = this.$store.getters.getBars
+            let selelctedBars = this.$store.getters.selectedBars
+            if (bars.length === selelctedBars.length){
+                selelctedBars = undefined
+            } else {
+                selelctedBars = selelctedBars.map(bar => bar.id).join(",")
+            }
+
             // if (endTime - startTime > 7 * 24 * 3600){
             //     interval = 24 * 3600
             // } else if (endTime - startTime > 24 * 3600){
@@ -148,12 +162,13 @@ export default {
             querySurfTheInternetRecords({
                 startTime: startTime,
                 endTime: endTime,
-                interval: interval
+                interval: interval,
+                barIds: selelctedBars
             }).then(res => {
                 let recordData = res.data
                 this.updateData(recordData)
             })
-        }
+        },
     }
 }
 </script>

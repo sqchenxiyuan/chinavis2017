@@ -153,6 +153,10 @@ export default {
         updateState(){
             let startTime = (this.endTime - this.startTime) * this.start + this.startTime
             let endTime = (this.endTime - this.startTime) * this.end + this.startTime
+            this.$store.commit("setTimeRange", {
+                startTime,
+                endTime
+            })
             this.$emit("update", {
                 startTime,
                 endTime
@@ -189,6 +193,7 @@ export default {
     width: 100%;
     height: 100%;
     border: 1px solid black;
+    box-sizing: border-box;
 }
 
 .selected-container{

@@ -91,6 +91,7 @@ export default {
             let bmap = this.bmap
             this.selectPolygons.forEach(polygon => bmap.removeOverlay(polygon))
             this.selectPolygons = []
+            this.selelctOver()
         },
         go2select(e){
             let div = e.target
@@ -133,10 +134,10 @@ export default {
         selelctOver(){
             let polygons = this.selectPolygons
             let bars = this.bars
-            let data = bars.filter(bar => {
+            bars = bars.filter(bar => {
                 return polygons.some(p => BMapLib.GeoUtils.isPointInPolygon(new BMap.Point(bar.longitude, bar.latitude), p))
             })
-            console.log(data)
+            this.$store.commit("setSelectedBars", bars)
         }
     }
 }

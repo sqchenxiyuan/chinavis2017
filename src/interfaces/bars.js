@@ -18,16 +18,17 @@ export function querySurfTheInternetRecords(obj = {}){
     let {
         startTime,
         endTime,
-        interval
+        interval,
+        barIds,
     } = obj
 
-    return axios.get("http://10.10.9.233:8080/internet_users", {
-        params: {
-            startTime,
-            endTime,
-            interval
-        }
-    })
+    let formdata = new FormData()
+    formdata.set("startTime", startTime)
+    formdata.set("endTime", endTime)
+    formdata.set("interval", interval)
+    if (barIds) formdata.set("barIds", barIds)
+
+    return axios.post("http://10.10.9.233:8080/internet_users", formdata)
 }
 
 export function queryPersonTimeCount(obj = {}){
