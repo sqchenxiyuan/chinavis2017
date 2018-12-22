@@ -38,8 +38,9 @@ export default {
                 },
                 grid: {
                     left: "3%",
-                    right: "4%",
+                    right: "3%",
                     bottom: "3%",
+                    top: "10%",
                     containLabel: true
                 },
                 brush: {
@@ -47,12 +48,12 @@ export default {
                     xAxisIndex: 0
                 },
                 dataZoom: [
-                    {
-                        show: true,
-                        realtime: true,
-                        start: 0,
-                        end: 100
-                    },
+                    // {
+                    //     show: true,
+                    //     realtime: true,
+                    //     start: 0,
+                    //     end: 100
+                    // },
                     {
                         type: "inside",
                         realtime: true,

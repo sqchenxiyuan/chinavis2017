@@ -34,7 +34,7 @@ export default {
                     },
                 },
                 brush: {
-                    toolbox: ["rect", "keep", "clear"],
+                    toolbox: ["lineX", "lineY", "keep", "clear"],
                     xAxisIndex: 0
                 },
                 xAxis: {
