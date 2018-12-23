@@ -13,10 +13,6 @@ export default {
     data(){
         return {
             myChart: null,
-            range: {
-                startTime: 1475251200000,
-                endTime: 1482768000000
-            }
         }
     },
     created(){
@@ -24,15 +20,8 @@ export default {
         eventBus.$on("selectedBarsUpdate", this.somethingsUpdate)
     },
     mounted(){
-        querySurfTheInternetRecords({
-            startTime: 1475251200,
-            endTime: 1482768000,
-            interval: 24 * 3600
-        }).then(res => {
-            let recordData = res.data
-            this.initData()
-            this.updateData(recordData)
-        })
+        this.initData()
+        this.somethingsUpdate()
     },
     methods: {
         initData(recordData){
@@ -140,7 +129,6 @@ export default {
             } else if (safeWidth > 60){
                 interval = Math.ceil(safeWidth / 60) * 60
             }
-            console.log(interval)
 
             let bars = this.$store.getters.getBars
             let selelctedBars = this.$store.getters.selectedBars

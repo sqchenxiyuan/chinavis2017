@@ -44,3 +44,8 @@ export function queryPersonTimeCount(obj = {}){
         }
     })
 }
+
+
+export function queryAgeCount(obj = {}){
+    return axios.get("http://10.10.9.233:8080/age-count")
+}

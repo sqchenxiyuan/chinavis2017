@@ -11,6 +11,8 @@
 <script>
 import echarts from "echarts"
 
+import { queryAgeCount } from "../interfaces/bars.js"
+
 export default {
     data(){
         return {
@@ -20,6 +22,7 @@ export default {
     },
     mounted(){
         this.initChart()
+        this.update()
     },
     methods: {
         initChart(){
@@ -93,14 +96,8 @@ export default {
                     trigger: "item",
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
-                legend: {
-                    orient: "vertical",
-                    x: "left",
-                    data: ["未成年", "成年人", "老年人"]
-                },
                 series: [
                     {
-                        name: "访问来源",
                         type: "pie",
                         radius: ["50%", "70%"],
                         avoidLabelOverlap: false,
@@ -122,11 +119,31 @@ export default {
                                 show: false
                             }
                         },
-                        data: [
-                            {value: 335, name: "未成年"},
-                            {value: 310, name: "成年人"},
-                            {value: 310, name: "老年人"},
-                        ]
+                        data: []
+                    },
+                    {
+                        type: "pie",
+                        radius: ["0%", "32%"],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: "center"
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: "30",
+                                    fontWeight: "bold"
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: []
                     }
                 ]
             }
@@ -224,6 +241,50 @@ export default {
             }
             fromChart.setOption(option)
             this.fromChart = fromChart
+        },
+        update(){
+            this.updateAgeChart()
+        },
+        updateAgeChart(){
+            queryAgeCount().then(res => {
+                let data = res.data
+
+                let secondData = [
+                    {value: 0, name: "未成年"},
+                    {value: 0, name: "成年人"},
+                    {value: 0, name: "老年人"},
+                ]
+
+                data.forEach(d => {
+                    if (d.age < 18){
+                        secondData[0].value += d.count
+                    } else if (d.age >= 65){
+                        secondData[2].value += d.count
+                    } else {
+                        secondData[1].value += d.count
+                    }
+                })
+                console.log(secondData)
+
+                let option = {
+                    series: [
+                        {
+                            data: data.map(d => {
+                                console.log(d)
+                                return {
+                                    value: d.count,
+                                    name: d.age
+                                }
+                            })
+                        },
+                        {
+                            data: secondData
+                        }
+                    ]
+                }
+
+                this.ageChart.setOption(option)
+            })
         }
     }
 }
