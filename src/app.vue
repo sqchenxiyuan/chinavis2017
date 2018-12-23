@@ -102,31 +102,37 @@ export default {
 
         .records-conatiner{
             flex: 4;
+            background-color: #404A59;
+            margin-top: 20px;
         }
 
         .time-selector-conatiner{
-            height: 50px;
+            height: 40px;
         }
     }
 
     .center-container{
         width: 50px;
+        
     }
 
     .right-container{
         flex: 1;
         display: flex;
         flex-direction: column;
+        
 
         .bars-conatiner{
             position: relative;
             flex: 6;
             display: flex;
             flex-direction: column;
+            
 
             .list-container, .statistics-container{
                 position: relative;
                 flex: 1;
+
             }
         }
 
@@ -134,10 +140,13 @@ export default {
             position: relative;
             flex: 4;
             display: flex;
+            margin-top: 30px;
+            height: 286px;
 
             .person-time-heatmap, .person-from-heatmap{
                 flex: 1;
                 position: relative;
+                
             }
         }
 

@@ -8,22 +8,19 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${file}",
-            "runtimeExecutable": "/root/gits/nvm/versions/node/v10.13.0/bin/node"
+            "program": "${file}"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "server",
-            "program": "${workspaceFolder}/server/index.js",
-            "runtimeExecutable": "/root/gits/nvm/versions/node/v10.13.0/bin/node"
+            "program": "${workspaceFolder}/server/index.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "存储数据",
-            "program": "${workspaceFolder}/data/data-store.js",
-            "runtimeExecutable": "/root/gits/nvm/versions/node/v10.13.0/bin/node"
+            "program": "${workspaceFolder}/data/data-store.js"
         }
     ]
 }

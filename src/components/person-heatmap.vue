@@ -1,5 +1,5 @@
 <template>
-    <div ref="records" style="position:absolute; top: 0; left: 0; width: 100%; height:100%;"></div>
+    <div ref="records" style="position:absolute; top: 0; left: 0; width: 100%; height:100%;background-color:#404A59"></div>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ export default {
                     trigger: "none",
                     axisPointer: {
                         type: "cross"
-                    },
+                    },  
                 },
                 brush: {
                     toolbox: ["lineX", "lineY", "keep", "clear"],
@@ -39,11 +39,29 @@ export default {
                 },
                 xAxis: {
                     type: "category",
-                    data: []
+                    data: [],
+                    axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#fff',//左边线的颜色
+                        width:'1'//坐标线的宽度
+                    }
+                },
                 },
                 yAxis: {
                     type: "category",
-                    data: []
+                    data: [],
+                    axisLine: {
+                    lineStyle: {
+                       type: 'solid',
+                       color:'#fff',
+                       width:'1'
+                   }
+               },
+                },
+                grid:{
+                    show: true,
+                    borderColor: "#fff"
                 },
                 visualMap: {
                     type: "continuous",
@@ -54,8 +72,11 @@ export default {
                     left: "center",
                     top: "0%",
                     inRange: {
-                        color: ["yellow", "red"],
+                        color: ["#50a3ba", "#eac736", "#d94e5d"],
                         symbolSize: [30, 100]
+                    },
+                     textStyle: {
+                        color: "#fff"
                     }
                 },
                 series: [{

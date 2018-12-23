@@ -1,6 +1,6 @@
 module.exports = {
     mariadb:{
-        host: "127.0.0.1",
+        host: "10.10.9.120",
         port: 3306,
         user: "root",
         password: "root",

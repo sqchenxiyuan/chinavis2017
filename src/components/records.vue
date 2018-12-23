@@ -46,7 +46,7 @@ export default {
                     right: "3%",
                     bottom: "3%",
                     top: "10%",
-                    containLabel: true
+                    containLabel: true,
                 },
                 brush: {
                     toolbox: ["lineX", "keep", "clear"],
@@ -79,10 +79,24 @@ export default {
                 xAxis: {
                     type: "category",
                     boundaryGap: false,
-                    data: []
+                    data: [],
+                    axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#fff',//左边线的颜色
+                        width:'1'//坐标线的宽度
+                    }
+                },
                 },
                 yAxis: {
-                    type: "value"
+                    type: "value",
+                    axisLine: {
+                    lineStyle: {
+                       type: 'solid',
+                       color:'#fff',
+                       width:'1'
+                   }
+               },
                 },
                 series: [
                     {
