@@ -34,7 +34,7 @@ export default {
                     },  
                 },
                 brush: {
-                    toolbox: ["lineX", "lineY", "keep", "clear"],
+                    toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
                     xAxisIndex: 0
                 },
                 xAxis: {
@@ -118,7 +118,6 @@ export default {
                     data.push([d.internetTime, d.age, d.count])
                 }
             })
-            console.log(xData, yData, data)
 
             myChart.setOption({
                 xAxis: {

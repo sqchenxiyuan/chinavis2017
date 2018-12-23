@@ -27,7 +27,6 @@ export default {
     data(){
         let props = this.$props
         let minP = props.minTime / (props.endTime - props.startTime)
-        console.log(minP)
         return {
             start: props.initStart,
             end: props.initEnd,

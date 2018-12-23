@@ -2,12 +2,18 @@
     <div style="position:absolute; top: 0; left: 0; width: 100%; height:100%;">
         <div ref="map" style="position:absolute; top: 0; left: 0; width: 100%; height:100%;"></div>
         <div v-show="selecting" style="cursor: crosshair;z-index: 10;position:absolute; top: 0; left: 0; width: 100%; height:100%;" @mousedown="go2select"></div>
+        <div ref="search">
+            <input v-model="searchValue"></input>
+            <button @click="searchPOI">搜索</button>
+        </div>
     </div>
 </template>
 
 <script>
 import echarts from "echarts"
 import styleJson from "../utils/custom_map_config.json"
+
+import eventBus from "./eventbus.js"
 
 export default {
     data(){
@@ -17,29 +23,32 @@ export default {
             startCenter: null,
             selectPolygons: [],
             selecting: false,
+
+
+            searchValue: "",
+            searchHandle: null
         }
     },
-    computed:{
+    computed: {
         bars(){
-            return this.$store.getters.getBars
+            return this.$store.getters.selectedBars
         }
     },
     mounted(){
-        let myChart = echarts.init(this.$refs.map)
-        this.initAsHeatmap(myChart, [106.55, 29.57], 8)
-        this.myChart = myChart
+        eventBus.$on("selectedBarsUpdate", this.updateChart)
+
+        this.initChart()
+        this.updateChart()
     },
     methods: {
-        initAsHeatmap(myChart, center = [106.55, 29.57], zoom = 8){
-            let bars = this.bars
-            let data = bars.map(bar => {
-                return [bar.longitude, bar.latitude, 1]  
-            })
-            let options = {
+        initChart(){
+            let myChart = echarts.init(this.$refs.map)
+
+            let option = {
                 animation: false,
                 bmap: {
-                    center: center,
-                    zoom: zoom,
+                    center: [106.55, 29.57],
+                    zoom: 8,
                     roam: true,
                     mapStyle: {
                         styleJson: styleJson
@@ -60,7 +69,7 @@ export default {
                     {
                         type: "heatmap",
                         coordinateSystem: "bmap",
-                        data: data,
+                        data: [],
                         pointSize: 3,
                         blurSize: 6
                     }, 
@@ -76,13 +85,65 @@ export default {
                     // }
                 ]
             }
-            myChart.setOption(options)
+            myChart.setOption(option)
+
             let bmap = myChart.getModel().getComponent("bmap").getBMap()
             bmap.addControl(new BMap.MapTypeControl({
                 mapTypes: []
             }))
+
+            bmap.setMinZoom(7)
+
+            let navigationControl = new BMap.NavigationControl({
+                // 靠左上角位置
+                anchor: BMAP_ANCHOR_TOP_LEFT,
+                // LARGE类型
+                type: BMAP_NAVIGATION_CONTROL_LARGE,
+            })
+            bmap.addControl(navigationControl)
+
+            //搜索控件
+            function SearchControl(){
+                // 默认停靠位置和偏移量
+                this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT
+                this.defaultOffset = new BMap.Size(10, 10)
+            }
+            SearchControl.prototype = new BMap.Control()
+            SearchControl.prototype.initialize = map => {
+                map.getContainer().appendChild(this.$refs.search)
+                return this.$refs.search
+            }
+            let searchControl = new SearchControl()
+            bmap.addControl(searchControl)
+            searchControl.setOffset(new BMap.Size(60, 10))
+
+            let searchHandle = new BMap.LocalSearch(bmap, {
+                renderOptions: {map: bmap}
+            })
+            this.searchHandle = searchHandle
+
+
+
+            
             this.startCenter = bmap.pointToOverlayPixel(bmap.getCenter())
             this.bmap = bmap
+            this.myChart = myChart
+        },
+        updateChart(){
+            let myChart = this.myChart
+
+            let bars = this.bars
+            let data = bars.map(bar => {
+                return [bar.longitude, bar.latitude, 1]  
+            })
+
+            myChart.setOption({
+                series: [
+                    {
+                        data: data
+                    }
+                ]
+            })
         },
         startSelect(){
             this.selecting = true
@@ -138,6 +199,10 @@ export default {
                 return polygons.some(p => BMapLib.GeoUtils.isPointInPolygon(new BMap.Point(bar.longitude, bar.latitude), p))
             })
             this.$store.commit("setSelectedBars", bars)
+        },
+        searchPOI(){
+            let bmap = this.bmap
+            this.searchHandle.search(this.searchValue)
         }
     }
 }
