@@ -15,9 +15,10 @@
             <div class="controler">
                 <button @click="startSelect">选择</button>
                 <button @click="clearSelect">清除选择</button>
-                <button>网吧</button>
-                <button>上网记录</button>
-                <button>流动人口</button>
+                <button @click="updateMapType('BARS')">网吧</button>
+                <button @click="updateMapType('INTERNET_RECORD')">上网记录</button>
+                <button @click="updateMapType('FLOAT_PERSON')">流动人口</button>
+                <button @click="updateMapType('UNDER_AGE')">未成年人口</button>
             </div>
         </div>
         <div class="right-container">
@@ -61,6 +62,9 @@ export default {
         },
         clearSelect(){
             this.$refs.baidumap.clearSelect()
+        },
+        updateMapType(type){
+            this.$refs.baidumap.updateType(type)
         }
     },
     components: {

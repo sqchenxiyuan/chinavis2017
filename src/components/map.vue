@@ -14,6 +14,7 @@ import echarts from "echarts"
 import styleJson from "../utils/custom_map_config.json"
 
 import eventBus from "./eventbus.js"
+import { queryBarsInfo } from "../interfaces/bars.js"
 
 export default {
     data(){
@@ -24,6 +25,7 @@ export default {
             selectPolygons: [],
             selecting: false,
 
+            type: "BARS",
 
             searchValue: "",
             searchHandle: null
@@ -32,6 +34,13 @@ export default {
     computed: {
         bars(){
             return this.$store.getters.selectedBars
+        }
+    },
+    watch: {
+        type(nv, ov){
+            if (nv != ov){
+                this.updateChart()
+            }
         }
     },
     mounted(){
@@ -45,7 +54,6 @@ export default {
             let myChart = echarts.init(this.$refs.map)
 
             let option = {
-                animation: false,
                 bmap: {
                     center: [106.55, 29.57],
                     zoom: 8,
@@ -129,8 +137,23 @@ export default {
             this.bmap = bmap
             this.myChart = myChart
         },
+        updateType(type){
+            this.type = type
+        },
         updateChart(){
             let myChart = this.myChart
+
+            if (this.type === "INTERNET_RECORD"){
+                return this.updateInternetRecordMap()
+            }
+
+            if (this.type === "FLOAT_PERSON"){
+                return this.updateFloatPersonMap()
+            }
+
+            if (this.type === "UNDER_AGE"){
+                return this.updateUnderAgeMap()
+            }
 
             let bars = this.bars
             let data = bars.map(bar => {
@@ -138,11 +161,96 @@ export default {
             })
 
             myChart.setOption({
+                visualMap: {
+                    min: 0,
+                    max: 3,
+                },
                 series: [
                     {
                         data: data
                     }
                 ]
+            })
+        },
+        updateInternetRecordMap(){
+            queryBarsInfo().then(res => {
+                let myChart = this.myChart
+                let data = res.data
+                let barMap = this.$store.getters.barsMap
+
+                let all = 0
+
+                data = data.map(barData => {
+                    let bar = barMap[barData.barId]
+                    all += barData.count
+                    return [bar.longitude, bar.latitude, barData.count]
+                })
+
+                myChart.setOption({
+                    visualMap: {
+                        min: 0,
+                        max: all / data.length * 1.5,
+                    },
+                    series: [
+                        {
+                            data: data
+                        }
+                    ]
+                })
+            })
+        },
+        updateFloatPersonMap(){
+            queryBarsInfo().then(res => {
+                let myChart = this.myChart
+                let data = res.data
+                let barMap = this.$store.getters.barsMap
+
+                let all = 0
+
+                data = data.map(barData => {
+                    let bar = barMap[barData.barId]
+                    all += barData.float_count
+                    return [bar.longitude, bar.latitude, barData.float_count]
+                })
+
+                myChart.setOption({
+                    visualMap: {
+                        min: 0,
+                        max: all / data.length * 1.5,
+                    },
+                    series: [
+                        {
+                            data: data
+                        }
+                    ]
+                })
+            })
+        },
+        updateUnderAgeMap(){
+            queryBarsInfo().then(res => {
+                let myChart = this.myChart
+                let data = res.data
+                let barMap = this.$store.getters.barsMap
+
+                let all = 0
+
+                data = data.map(barData => {
+                    let bar = barMap[barData.barId]
+                    all += barData.under_age_count
+                    return [bar.longitude, bar.latitude, barData.under_age_count]
+                })
+
+                myChart.setOption({
+                    visualMap: {
+                        min: 0,
+                        max: all / data.length * 1.5,
+                    },
+                    series: [
+                        {
+                            data: data
+                        }
+                    ]
+                })
             })
         },
         startSelect(){

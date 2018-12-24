@@ -6,12 +6,7 @@ export function queryBars(obj = {}){
         limit
     } = obj
 
-    return axios.get("/bars", {
-        params: {
-            offset,
-            limit
-        }
-    })
+    return axios.get("http://10.10.9.233:8080/bars")
 }
 
 export function querySurfTheInternetRecords(obj = {}){
@@ -45,7 +40,33 @@ export function queryPersonTimeCount(obj = {}){
     })
 }
 
+export function queryBarsInfo(obj = {}){
+    return axios.get("http://10.10.9.233:8080/filterinfo", {
+        params: {
+            startTime: 1475251200,
+            endTime: 1482768000,
+            minAge: 0,
+            maxAge: 1000,
+            maxInternetTime: 100000000000,
+            minInternetTime: 0,
+        }
+    })
+}
 
 export function queryAgeCount(obj = {}){
     return axios.get("http://10.10.9.233:8080/age-count")
+}
+
+export function queryInternetTimeDistribution(obj = {}){
+    let {
+        startTime,
+        endTime,
+    } = obj
+
+    return axios.get("http://10.10.9.233:8080/internet-time-distribution", {
+        params: {
+            startTime,
+            endTime,
+        }
+    })
 }
