@@ -249,9 +249,6 @@ export default {
                     inRange: {
                         color: ["#50a3ba", "#eac736", "#d94e5d"]
                     },
-                    textStyle: {
-                        color: "#fff"
-                    }
                 },
                 geo: {
                     map: "china",
