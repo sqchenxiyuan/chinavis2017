@@ -2,7 +2,7 @@
     <div class="bars-list-container">
         <div class="list-title">网吧列表</div>
         <div class="list-content">
-            <div class="bar-item" v-for="bar in bars" :key="bar.id">{{bar.name}}</div>
+            <div class="bar-item" v-for="bar in bars" :key="bar.id" @click="selectBar(bar)">{{bar.name}}</div>
         </div>
     </div>
 </template>
@@ -12,6 +12,11 @@ export default {
     data(){
         return {
 
+        }
+    },
+    methods:{
+        selectBar(bar){
+            this.$store.commit("setSingleBar", bar)
         }
     },
     computed:{

@@ -33,7 +33,7 @@ export default {
     },
     computed: {
         bars(){
-            return this.$store.getters.selectedBars
+            return this.$store.getters.getBars
         }
     },
     watch: {
@@ -44,7 +44,9 @@ export default {
         }
     },
     mounted(){
+        eventBus.$on("timeRangeUpdate", this.updateChart)
         eventBus.$on("selectedBarsUpdate", this.updateChart)
+        eventBus.$on("ageInternetTimeRangeUpdate", this.updateChart)
 
         this.initChart()
         this.updateChart()
@@ -173,7 +175,16 @@ export default {
             })
         },
         updateInternetRecordMap(){
-            queryBarsInfo().then(res => {
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+
+            queryBarsInfo({
+                startTime,
+                endTime,
+                ageTime
+            }).then(res => {
                 let myChart = this.myChart
                 let data = res.data
                 let barMap = this.$store.getters.barsMap
@@ -200,7 +211,16 @@ export default {
             })
         },
         updateFloatPersonMap(){
-            queryBarsInfo().then(res => {
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+
+            queryBarsInfo({
+                startTime,
+                endTime,
+                ageTime
+            }).then(res => {
                 let myChart = this.myChart
                 let data = res.data
                 let barMap = this.$store.getters.barsMap
@@ -227,7 +247,16 @@ export default {
             })
         },
         updateUnderAgeMap(){
-            queryBarsInfo().then(res => {
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+
+            queryBarsInfo({
+                startTime,
+                endTime,
+                ageTime
+            }).then(res => {
                 let myChart = this.myChart
                 let data = res.data
                 let barMap = this.$store.getters.barsMap
