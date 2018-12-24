@@ -10,6 +10,7 @@ let storeConfig = {
             startTime: 1475251200000,
             endTime: 1482768000000
         },
+        ageInternetTimeRange: [],
 
 
         bus: eventBus
@@ -17,6 +18,12 @@ let storeConfig = {
     getters: {
         getBars(state){
             return state.bars
+        },
+        barsMap(state){
+            let bars = state.bars
+            let map = {}
+            bars.forEach(bar => map[bar.id] = bar)
+            return map
         },
         selectedBars(state){
             if (state.selectedBars.length === 0){
@@ -39,6 +46,10 @@ let storeConfig = {
         setTimeRange(state, range){
             state.timeRange = range
             state.bus.$emit("timeRangeUpdate")
+        },
+        setAgeInternetTimeRange(state, range){
+            state.ageInternetTimeRange = range
+            state.bus.$emit("ageInternetTimeRangeUpdate")
         }
     },
     actions: {
@@ -49,7 +60,7 @@ let storeConfig = {
             let bars = await queryBars({
                 limit: 10000
             }).then(res => {
-                return res.data.bars
+                return res.data
             })
             return commit("setBars", bars)
         }

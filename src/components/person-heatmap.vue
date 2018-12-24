@@ -10,7 +10,9 @@ import { queryPersonTimeCount } from "../interfaces/bars.js"
 export default {
     data(){
         return {
-            myChart: null
+            myChart: null,
+            
+            scatterdata: [],
         }
     },
     mounted(){
@@ -35,7 +37,8 @@ export default {
                 },
                 brush: {
                     toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
-                    xAxisIndex: 0
+                    throttleType: "debounce",
+                    throttleDelay: 700
                 },
                 xAxis: {
                     type: "category",
@@ -79,19 +82,31 @@ export default {
                         color: "#fff"
                     }
                 },
-                series: [{
-                    type: "heatmap",
-                    data: [],
-                    itemStyle: {
-                        emphasis: {
-                            borderColor: "#333",
-                            borderWidth: 1
-                        }
+                series: [
+                    {
+                        type: "scatter",
+                        data: [],
+                        symbol: "rect",
+                        symbolSize: 0,
+                        animation: false
                     },
-                    animation: false
-                }]
+                    {
+                        type: "heatmap",
+                        data: [],
+                        itemStyle: {
+                            emphasis: {
+                                borderColor: "#333",
+                                borderWidth: 1
+                            }
+                        },
+                        animation: false
+                    }]
             }
             myChart.setOption(option)
+
+            myChart.on("brushselected", e => {
+                this.computeNewRange(e.batch[0].selected[0].dataIndex)
+            })
 
             this.myChart = myChart
         },
@@ -112,34 +127,81 @@ export default {
                 yData.push(i)
             } 
 
-            let data = []
+            let heatmapdata = []
+            let scatterdata = []
             agetimecountData.forEach(d => {
                 if (d.count > 0){
-                    data.push([d.internetTime, d.age, d.count])
+                    heatmapdata.push([d.internetTime, d.age, d.count])
                 }
+                scatterdata.push([d.internetTime, d.age, 1])
             })
+            this.scatterdata = scatterdata
 
             myChart.setOption({
                 xAxis: {
-                    type: "category",
                     data: xData
                 },
                 yAxis: {
-                    type: "category",
                     data: yData
                 },
                 series: [{
-                    type: "heatmap",
-                    data: data,
-                    itemStyle: {
-                        emphasis: {
-                            borderColor: "#333",
-                            borderWidth: 1
-                        }
-                    },
-                    animation: false
+                    data: scatterdata,
+                }, {
+                    data: heatmapdata,
                 }]
             })
+        },
+        computeNewRange(dataIndex){
+            if(dataIndex.length === 0) return 
+
+            let datas = this.scatterdata
+            let HOUR = 3600
+
+            let ageMap = new Map()
+
+            dataIndex.forEach(index => {
+                let data = datas[index]
+                let age = data[1]
+                let time = data[0]
+                
+                if (ageMap.has(age)){
+                    ageMap.get(age).push(time * HOUR)
+                } else {
+                    ageMap.set(age, [time * HOUR])
+                }
+            })
+
+            let ageArr = []
+            ;([...ageMap.keys()]).forEach(age => {
+                ageArr.push({
+                    age,
+                    data: ageMap.get(age)
+                })
+            })
+            ageArr = ageArr.map(ageData => {
+                let age = ageData.age
+                let data = ageData.data
+                data.sort((a, b) => a - b)
+
+                let times = []
+                let timeItem = [data[0], data[0]]
+                times.push(timeItem)
+                for (let i = 1;i < data.length; i++){
+                    if (data[i] === data[i - 1] + HOUR){
+                        timeItem[1] += HOUR
+                    } else {
+                        timeItem = [data[i], data[i]]
+                        times.push(timeItem)
+                    }
+                }
+
+                return {
+                    age,
+                    times
+                }
+            })
+            
+            this.$store.commit("setAgeInternetTimeRange", ageArr)
         }
     }
 }

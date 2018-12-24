@@ -119,7 +119,7 @@ export default {
                 xAxis: {
                     type: "category",
                     boundaryGap: false,
-                    data: recordData.map(record => moment(record.startTime * 1000).format("YYYY-MM-DD HH:mm:ss dddd"))
+                    data: recordData.map(record => moment((record.startTime + record.endTime) / 2 * 1000).format("YYYY-MM-DD HH:mm:ss dddd"))
                 },
                 series: [
                     {
