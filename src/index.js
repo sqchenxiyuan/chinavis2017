@@ -6,7 +6,9 @@ import "moment/locale/zh-cn"
 // import "script-loader!echarts/dist/echarts.min.js"
 // import "script-loader!echarts-bmap/dist/echarts-bmap.js"
 import echarts from "echarts"
+import echartConfig from "./utils/echarts-config.json"
 import "echarts/extension/bmap/bmap.js"
+echarts.registerTheme("dark", echartConfig)
 
 import chinaMap from "echarts/map/json/china.json"
 echarts.registerMap("china", chinaMap)

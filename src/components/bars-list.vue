@@ -49,7 +49,11 @@ export default {
                 let barsdata = res.data
                 barsdata = barsdata.filter(data => data.count > 0)
                 barsdata.forEach(data => {
-                    data.name = this.barsMap[data.barId].name
+                    if (this.barsMap[data.barId]){
+                        data.name = this.barsMap[data.barId].name
+                    } else {
+                        data.name = "未知网吧"
+                    }
                     data.id = data.barId
                 })
                 barsdata.sort((a, b) => {

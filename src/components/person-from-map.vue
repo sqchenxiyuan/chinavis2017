@@ -1,5 +1,5 @@
 <template>
-    <div ref="person-from-map" style="position:absolute; top: 0; left: 0; width: 100%; height:100%;background-color:#404A59;margin-left:20px;"></div>
+    <div ref="person-from-map" style="position:absolute; top: 0; left: 0; width: 100%; height:100%;background-color:#404A59;"></div>
 </template>
 
 <script>
@@ -24,9 +24,9 @@ export default {
     },
     methods: {
         initData(){
-            let myChart = echarts.init(this.$refs["person-from-map"])
+            let myChart = echarts.init(this.$refs["person-from-map"], "dark")
             let option = {
-                backgroundColor: "#404a59",
+                // backgroundColor: "#404a59",
                 tooltip: {
                     trigger: "item",
                     formatter: function (params) {
@@ -46,9 +46,6 @@ export default {
                     min: 0,
                     max: 200,
                     calculable: false,
-                    inRange: {
-                        color: ["#50a3ba", "#eac736", "#d94e5d"]
-                    },
                     textStyle: {
                         color: "#fff"
                     },
@@ -64,13 +61,13 @@ export default {
                         }
                     },
                     itemStyle: {
-                        normal: {
-                            areaColor: "#323c48",
-                            borderColor: "#111"
-                        },
-                        emphasis: {
-                            areaColor: "#2a333d"
-                        }
+                        // normal: {
+                        //     areaColor: "#323c48",
+                        //     borderColor: "#111"
+                        // },
+                        // emphasis: {
+                        //     areaColor: "#2a333d"
+                        // }
                     }
                 },
                 series: [
@@ -90,7 +87,7 @@ export default {
                         },
                         itemStyle: {
                             emphasis: {
-                                borderColor: "#fff",
+                                // borderColor: "#fff",
                                 borderWidth: 1
                             }
                         }

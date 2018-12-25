@@ -73,7 +73,7 @@ export default {
                     calculable: true,
                     inRange: {
                         color: ["blue", "blue", "green", "yellow", "red"]
-                    }
+                    },
                 },
                 series: [
                     {

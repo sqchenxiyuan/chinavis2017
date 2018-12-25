@@ -38,7 +38,7 @@ export default {
             this.initFromChart()
         },
         initTimeChart(){
-            let timeChart = echarts.init(this.$refs.time)
+            let timeChart = echarts.init(this.$refs.time, "dark")
 
             let hours = ["0", "1", "2", "3", "4", "5", "6",
                 "7", "8", "9", "10", "11", "12", 
@@ -59,15 +59,15 @@ export default {
                     splitLine: {
                         show: true,
                         lineStyle: {
-                            color: "#fff",
+                            // color: "#fff",
                             type: "dashed",
                         },
                     },
                     axisLine: {
                         show: false,
                     },
-                    axisLabel:{
-                        color:'#fff'
+                    axisLabel: {
+                        // color:'#fff'
                     }
                 },
                 brush: {
@@ -81,9 +81,9 @@ export default {
                     axisLine: {
                         show: false
                     },
-                    axisLabel:{
-                        color:'#fff',
-                        fontSize:'12px'
+                    axisLabel: {
+                        // color:'#fff',
+                        fontSize: "12px"
                     }
                 },
                 series: [{
@@ -162,7 +162,7 @@ export default {
             })
         },
         initAgeChart(){
-            let ageChart = echarts.init(this.$refs.age)
+            let ageChart = echarts.init(this.$refs.age, "dark")
             let option = {
                 tooltip: {
                     trigger: "item",
@@ -278,7 +278,7 @@ export default {
             this.updateFromChart()
         },
         initFromChart(){
-            let fromChart = echarts.init(this.$refs.from)
+            let fromChart = echarts.init(this.$refs.from, "dark")
             let option = {
                 // tooltip: {
                 //     trigger: "item",

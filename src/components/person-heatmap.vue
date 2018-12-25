@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         initData(){
-            let myChart = echarts.init(this.$refs.records)
+            let myChart = echarts.init(this.$refs.records, "dark")
             let option = {
                 tooltip: {
                     trigger: "none",
@@ -42,28 +42,13 @@ export default {
                 xAxis: {
                     type: "category",
                     data: [],
-                    axisLine: {
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#fff',//左边线的颜色
-                        width:'1'//坐标线的宽度
-                    }
-                },
                 },
                 yAxis: {
                     type: "category",
                     data: [],
-                    axisLine: {
-                    lineStyle: {
-                       type: 'solid',
-                       color:'#fff',
-                       width:'1'
-                   }
-               },
                 },
-                grid:{
+                grid: {
                     show: true,
-                    borderColor: "#fff"
                 },
                 visualMap: {
                     type: "continuous",
@@ -73,13 +58,6 @@ export default {
                     orient: "horizontal",
                     left: "center",
                     top: "0%",
-                    inRange: {
-                        color: ["#50a3ba", "#eac736", "#d94e5d"],
-                        // symbolSize: [30, 100]
-                    },
-                     textStyle: {
-                        color: "#fff"
-                    }
                 },
                 series: [
                     {

@@ -15,7 +15,7 @@
             <div class="controler">
                 <button @click="startSelect" style="padding:0 11.5px;">选择</button>
                 <button @click="clearSelect">清除选择</button>
-                <button class="group1" :class="{'active':activeType==='BARS'}" @click="updateMapType('BARS')" style="padding:0 11px;">网吧</button>
+                <button :class="{'active':activeType==='BARS'}" class="group1" @click="updateMapType('BARS')" style="padding:0 11px;">网吧</button>
                 <button :class="{'active':activeType==='INTERNET_RECORD'}" @click="updateMapType('INTERNET_RECORD')">上网记录</button>
                 <button :class="{'active':activeType==='FLOAT_PERSON'}" @click="updateMapType('FLOAT_PERSON')">流动人口</button>
                 <button :class="{'active':activeType==='UNDER_AGE'}" @click="updateMapType('UNDER_AGE')">未成年人口</button>
@@ -35,11 +35,10 @@
                 <div class="person-time-heatmap" >
                     <personHeatmap></personHeatmap>
                 </div>
+                <!-- <div style="width: 20px"></div> -->
                 <div class="person-from-heatmap">
                     <personFromMap></personFromMap>
                 </div>
-            </div>
-            <div class="controler-conatiner">
             </div>
         </div>
     </div>
@@ -60,8 +59,8 @@ import { exportData } from "./interfaces/bars.js"
 
 export default {
     data(){
-        return{
-            activeType:""
+        return {
+            activeType: "BARS"
         }
     },
     methods: {
@@ -110,6 +109,7 @@ export default {
     height: 100%;
     width: 100%;
     display: flex;
+    overflow: hidden;
 
     .left-container{
         flex: 1;
@@ -130,11 +130,10 @@ export default {
         .records-conatiner{
             flex: 4;
             background-color: #404A59;
-            margin-top: 20px;
         }
 
         .time-selector-conatiner{
-            height: 40px;
+            height: 32px;
         }
     }
 
@@ -191,7 +190,6 @@ export default {
             position: relative;
             flex: 4;
             display: flex;
-            margin-top: 30px;
             height: 286px;
 
             .person-time-heatmap, .person-from-heatmap{

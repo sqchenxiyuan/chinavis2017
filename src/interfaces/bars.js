@@ -115,7 +115,7 @@ export function queryPersonTimeCount(obj = {}){
     return axios.post("http://10.10.9.233:8080/age_time", formdata)
 }
 
-export function exportData(){
+export function exportData(obj = {}){
     let {
         startTime,
         endTime,

@@ -25,10 +25,10 @@ export default {
     },
     methods: {
         initData(recordData){
-            let myChart = echarts.init(this.$refs.records)
+            let myChart = echarts.init(this.$refs.records, "dark")
             let option = {
                 tooltip: {
-                    trigger: "axis"
+                    trigger: "axis",
                 },
                 grid: {
                     left: "3%",
@@ -36,6 +36,12 @@ export default {
                     bottom: "3%",
                     top: "10%",
                     containLabel: true,
+                },
+                legend: {
+                    data: ["上网总量", "未成年上网数"],
+                    textStyle: {
+                        color: "#fff"
+                    }
                 },
                 brush: {
                     toolbox: ["lineX", "keep", "clear"],
@@ -70,29 +76,55 @@ export default {
                     boundaryGap: false,
                     data: [],
                     axisLine: {
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#fff',//左边线的颜色
-                        width:'1'//坐标线的宽度
+                        lineStyle: {
+                            type: "solid",
+                            color: "#fff", //左边线的颜色
+                            width: "1"//坐标线的宽度
+                        }
+                    },
+                },
+                yAxis: [
+                    {
+                        name: "上网总量",
+                        type: "value",
+                        axisLine: {
+                            lineStyle: {
+                                type: "solid",
+                                color: "#fff",
+                                width: "1"
+                            }
+                        },
+                    },
+                    {
+                        name: "未成年上网数",
+                        type: "value",
+                        axisLine: {
+                            lineStyle: {
+                                type: "solid",
+                                color: "#fff",
+                                width: "1"
+                            }
+                        },
                     }
-                },
-                },
-                yAxis: {
-                    type: "value",
-                    axisLine: {
-                    lineStyle: {
-                       type: 'solid',
-                       color:'#fff',
-                       width:'1'
-                   }
-               },
-                },
+                ],
                 series: [
                     {
+                        name: "上网总量",
                         type: "line",
                         smooth: true,
+                        yAxisIndex: 0,
                         data: []
-                    }
+                    },
+                    {
+                        name: "未成年上网数",
+                        type: "line",
+                        smooth: true,
+                        yAxisIndex: 1,
+                        lineStyle: {
+                            color: "#50a3ba"
+                        },
+                        data: []
+                    },
                 ]
             }
             myChart.setOption(option)
@@ -123,9 +155,10 @@ export default {
                 },
                 series: [
                     {
-                        type: "line",
-                        smooth: true,
                         data: recordData.map(record => record.count)
+                    },
+                    {
+                        data: recordData.map(record => record.unadult_count)
                     }
                 ]
             })

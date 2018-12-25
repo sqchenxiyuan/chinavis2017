@@ -190,7 +190,7 @@ export default {
 .time-selector-container{
     position: relative;
     width: 100%;
-    height: 80%;
+    height: 100%;
     border: 1px solid black;
     box-sizing: border-box;
     border-radius: 5px;
@@ -200,7 +200,7 @@ export default {
     cursor: move;
     position: absolute;
     height: 100%;
-    background: #4D5E7A;
+    background: rgb(51, 51, 51);
 }
 
 .selector-handle{
