@@ -269,7 +269,6 @@ export default {
                         }
                     ]
                 }
-
                 this.ageChart.setOption(option)
             })
         },

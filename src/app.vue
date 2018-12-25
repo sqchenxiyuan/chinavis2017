@@ -13,13 +13,13 @@
         </div>
         <div class="center-container">
             <div class="controler">
-                <button @click="startSelect">&nbsp;&nbsp;选择</button>
+                <button @click="startSelect" style="padding:0 11.5px;">选择</button>
                 <button @click="clearSelect">清除选择</button>
-                <button @click="updateMapType('BARS')">&nbsp;&nbsp;网吧</button>
-                <button @click="updateMapType('INTERNET_RECORD')">上网记录</button>
-                <button @click="updateMapType('FLOAT_PERSON')">流动人口</button>
-                <button @click="updateMapType('UNDER_AGE')">未成年人口</button>
-                <button @click="downloadData">下载筛选数据</button>
+                <button class="group1" :class="{'active':activeType==='BARS'}" @click="updateMapType('BARS')" style="padding:0 11px;">网吧</button>
+                <button :class="{'active':activeType==='INTERNET_RECORD'}" @click="updateMapType('INTERNET_RECORD')">上网记录</button>
+                <button :class="{'active':activeType==='FLOAT_PERSON'}" @click="updateMapType('FLOAT_PERSON')">流动人口</button>
+                <button :class="{'active':activeType==='UNDER_AGE'}" @click="updateMapType('UNDER_AGE')">未成年人口</button>
+                <button class="group2" @click="downloadData">下载筛选数据</button>
             </div>
         </div>
         <div class="right-container">
@@ -59,6 +59,11 @@ import barsStatistics from "./components/bars-statistics.vue"
 import { exportData } from "./interfaces/bars.js"
 
 export default {
+    data(){
+        return{
+            activeType:""
+        }
+    },
     methods: {
         startSelect(){
             this.$refs.baidumap.startSelect()
@@ -67,6 +72,7 @@ export default {
             this.$refs.baidumap.clearSelect()
         },
         updateMapType(type){
+            this.activeType = type
             this.$refs.baidumap.updateType(type)
         },
         downloadData(){
@@ -134,7 +140,11 @@ export default {
 
     .center-container{
         width: 50px;
-
+        .active{
+            background-color: #23262D;
+            border: 1px solid #fff;
+            border-left: none; 
+        }
         button{
             background-color:  #404a59;
             border: none;
@@ -142,11 +152,16 @@ export default {
             border-bottom-right-radius: 3px;
             font-family: '微软雅黑';
             color:#F5F5F5;
+            outline: none;
+            cursor: pointer;
         }
-
+         .group1,.group2{
+                margin-top: 15px;
+            }
         
     }
-
+   
+    
     .right-container{
         flex: 1;
         display: flex;
