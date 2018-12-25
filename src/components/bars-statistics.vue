@@ -47,7 +47,7 @@ export default {
                 tooltip: {
                     formatter: function (params) {
                         return params.value[2] + " commits in " + hours[params.value[1]] + " of " + days[params.value[0]]
-                    }
+                    },
                 },
                 xAxis: {
                     type: "category",
@@ -56,24 +56,31 @@ export default {
                     splitLine: {
                         show: true,
                         lineStyle: {
-                            color: "#999",
-                            type: "dashed"
-                        }
+                            color: "#fff",
+                            type: "dashed",
+                        },
                     },
                     axisLine: {
-                        show: false
+                        show: false,
+                    },
+                    axisLabel:{
+                        color:'#fff'
                     }
                 },
                 brush: {
                     toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
                     throttleType: "debounce",
-                    throttleDelay: 700
+                    throttleDelay: 700,
                 },
                 yAxis: {
                     type: "category",
                     data: days,
                     axisLine: {
                         show: false
+                    },
+                    axisLabel:{
+                        color:'#fff',
+                        fontSize:'12px'
                     }
                 },
                 series: [{
@@ -85,7 +92,8 @@ export default {
                     animationDelay: function (idx) {
                         return idx * 5
                     }
-                }]
+                }],
+
             }
             timeChart.setOption(option)
             

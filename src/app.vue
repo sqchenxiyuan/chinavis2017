@@ -13,9 +13,9 @@
         </div>
         <div class="center-container">
             <div class="controler">
-                <button @click="startSelect">选择</button>
+                <button @click="startSelect">&nbsp;&nbsp;选择</button>
                 <button @click="clearSelect">清除选择</button>
-                <button @click="updateMapType('BARS')">网吧</button>
+                <button @click="updateMapType('BARS')">&nbsp;&nbsp;网吧</button>
                 <button @click="updateMapType('INTERNET_RECORD')">上网记录</button>
                 <button @click="updateMapType('FLOAT_PERSON')">流动人口</button>
                 <button @click="updateMapType('UNDER_AGE')">未成年人口</button>
@@ -117,6 +117,16 @@ export default {
 
     .center-container{
         width: 50px;
+
+        button{
+            background-color:  #404a59;
+            border: none;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            font-family: '微软雅黑';
+            color:#F5F5F5;
+        }
+
         
     }
 

@@ -37,6 +37,7 @@ export default {
 }
 
 .list-title{
+    color: #F5F5F5;
     height: 30px;
     line-height: 30px;
     box-sizing: border-box;
@@ -48,7 +49,9 @@ export default {
     overflow: auto;
 
     .bar-item{
-
+        color:  #999;
+        font-size: 12px;
+        padding-top: 10px;
         &:hover{
             cursor: pointer;
             background: black;

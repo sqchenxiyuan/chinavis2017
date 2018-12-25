@@ -76,7 +76,7 @@ export default {
                     top: "0%",
                     inRange: {
                         color: ["#50a3ba", "#eac736", "#d94e5d"],
-                        symbolSize: [30, 100]
+                        // symbolSize: [30, 100]
                     },
                      textStyle: {
                         color: "#fff"
