@@ -8,22 +8,57 @@
 </template>
 
 <script>
+
+import eventBus from "./eventbus.js"
+import { queryBarsInfo } from "../interfaces/bars.js"
+
 export default {
     data(){
         return {
-
+            bars: []
         }
     },
-    methods:{
+    computed: {
+        barsMap(){
+            return this.$store.getters.barsMap
+        }
+    },
+    mounted(){
+        eventBus.$on("timeRangeUpdate", this.update)
+        eventBus.$on("selectedBarsUpdate", this.update)
+        eventBus.$on("ageInternetTimeRangeUpdate", this.update)
+        eventBus.$on("singleBarUpdate", this.update)
+
+        this.update()
+    },
+    methods: {
         selectBar(bar){
             this.$store.commit("setSingleBar", bar)
+        },
+        update(){
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+
+            queryBarsInfo({
+                startTime,
+                endTime,
+                ageTime
+            }).then(res => {
+                let barsdata = res.data
+                barsdata = barsdata.filter(data => data.count > 0)
+                barsdata.forEach(data => {
+                    data.name = this.barsMap[data.barId].name
+                    data.id = data.barId
+                })
+                barsdata.sort((a, b) => {
+                    return a.id - b.id
+                })
+                this.bars = barsdata 
+            })
         }
     },
-    computed:{
-        bars(){
-            return this.$store.getters.selectedBars
-        }
-    }
 }
 </script>
 
