@@ -5,6 +5,7 @@ let storeConfig = {
     state: {
         bars: [],
         
+        singleBar: null,
         selectedBars: [],
         timeRange: {
             startTime: 1475251200000,
@@ -25,29 +26,39 @@ let storeConfig = {
             bars.forEach(bar => map[bar.id] = bar)
             return map
         },
+        singleBar(state){
+            return state.singleBar
+        },
         selectedBars(state){
-            if (state.selectedBars.length === 0){
-                return state.bars
-            }
             return state.selectedBars
         },
         timeRange(state){
             return state.timeRange
+        },
+        ageTimeRange(state){
+            return state.ageInternetTimeRange
         }
     },
     mutations: {
         setBars(state, bars){
             state.bars = bars
         },
+        setSingleBar(state, bar){
+            state.singleBar = bar
+            state.bus.$emit("singleBarUpdate")
+        },
         setSelectedBars(state, bars){
+            state.singleBar = null
             state.selectedBars = bars
             state.bus.$emit("selectedBarsUpdate")
         },
         setTimeRange(state, range){
+            state.singleBar = null
             state.timeRange = range
             state.bus.$emit("timeRangeUpdate")
         },
         setAgeInternetTimeRange(state, range){
+            state.singleBar = null
             state.ageInternetTimeRange = range
             state.bus.$emit("ageInternetTimeRangeUpdate")
         }

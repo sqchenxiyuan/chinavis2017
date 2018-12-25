@@ -11,7 +11,9 @@
 <script>
 import echarts from "echarts"
 
-import { queryAgeCount, queryInternetTimeDistribution } from "../interfaces/bars.js"
+import eventBus from "./eventbus.js"
+
+import { queryAgeCount, queryInternetTimeDistribution, queryProvinceUsercount } from "../interfaces/bars.js"
 
 export default {
     data(){
@@ -26,6 +28,10 @@ export default {
     },
     methods: {
         initChart(){
+            eventBus.$on("timeRangeUpdate", this.update)
+            eventBus.$on("selectedBarsUpdate", this.update)
+            eventBus.$on("ageInternetTimeRangeUpdate", this.update)
+
             this.initTimeChart()
             this.initAgeChart()
             this.initFromChart()
@@ -97,11 +103,65 @@ export default {
             }
             timeChart.setOption(option)
             
-            timeChart.on("brushselected", e => {
-                console.log(e)
-            })
-            
             this.timeChart = timeChart
+        },
+        updateTimeChart(){
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
+
+            let range = this.$store.getters.timeRange
+            queryInternetTimeDistribution({
+                startTime: startTime,
+                endTime: endTime,
+                ageTime: ageTime,
+                barIds: barIds
+            }).then(res => {
+                let rawdata = res.data
+                let data = []
+
+                let min = Infinity
+                let max = 0
+
+                for (let i = 0; i < 7; i++){
+                    for (let j = 0; j < 24; j++){
+                        data.push([i, j, rawdata[i * 24 + j]])
+                        if (max < rawdata[i * 24 + j]){
+                            max = rawdata[i * 24 + j]
+                        }
+
+                        if (min > rawdata[i * 24 + j]){
+                            min = rawdata[i * 24 + j]
+                        }
+                    }
+                }
+                data = data.map(function (item) {
+                    return [item[1], item[0], item[2]]
+                })
+
+                let secondData = [
+                    {value: 0, name: "未成年"},
+                    {value: 0, name: "成年人"},
+                    {value: 0, name: "老年人"},
+                ]
+
+                let option = {
+                    series: [
+                        {
+                            data: data,
+                            symbolSize: function (val) {
+                                let data = val[2]
+                                let p = (data - min) / (max - min)
+                                return p * 10
+                            },
+                        }
+                    ],
+                }
+
+                this.timeChart.setOption(option)
+            })
         },
         initAgeChart(){
             let ageChart = echarts.init(this.$refs.age)
@@ -164,104 +224,19 @@ export default {
             ageChart.setOption(option)
             this.ageChart = ageChart
         },
-        initFromChart(){
-            let fromChart = echarts.init(this.$refs.from)
-            let option = {
-                // tooltip: {
-                //     trigger: "item",
-                //     formatter: "{a} <br/>{b}: {c} ({d}%)"
-                // },
-                // legend: {
-                //     orient: "vertical",
-                //     x: "left",
-                //     data: ["本地人", "外地人"]
-                // },
-                series: [
-                    {
-                        name: "访问来源",
-                        type: "pie",
-                        radius: ["0%", "30%"],
-                        avoidLabelOverlap: false,
-                        labelLine: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        data: [
-                            {value: 310, name: "本地人"},
-                            {value: 11 * 33, name: "外地人"},
-                        ]
-                    },
-                    {
-                        name: "访问来源",
-                        type: "pie",
-                        radius: ["50%", "70%"],
-                        avoidLabelOverlap: false,
-                        label: {
-                            normal: {
-                                show: false,
-                                position: "center"
-                            },
-                            emphasis: {
-                                show: true,
-                                textStyle: {
-                                    fontSize: "30",
-                                    fontWeight: "bold"
-                                }
-                            }
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        data: [
-                            {value: 310, name: "重庆"},
-                            {value: 11, name: "北京"},
-                            {value: 11, name: "天津"},
-                            {value: 11, name: "河北"},
-                            {value: 11, name: "山西"},
-                            {value: 11, name: "内蒙古"},
-                            {value: 11, name: "辽宁"},
-                            {value: 11, name: "吉林"},
-                            {value: 11, name: "黑龙江"},
-                            {value: 11, name: "上海"},
-                            {value: 11, name: "江苏"},
-                            {value: 11, name: "浙江省"},
-                            {value: 11, name: "安徽"},
-                            {value: 11, name: "福建"},
-                            {value: 11, name: "江西"},
-                            {value: 11, name: "山东"},
-                            {value: 11, name: "河南"},
-                            {value: 11, name: "湖北"},
-                            {value: 11, name: "湖南"},
-                            {value: 11, name: "广东"},
-                            {value: 11, name: "广西"},
-                            {value: 11, name: "四川"},
-                            {value: 11, name: "云南"},
-                            {value: 11, name: "贵州"},
-                            {value: 11, name: "西藏"},
-                            {value: 11, name: "陕西"},
-                            {value: 11, name: "甘肃"},
-                            {value: 11, name: "青海"},
-                            {value: 11, name: "宁夏"},
-                            {value: 11, name: "新疆"},
-                            {value: 11, name: "台湾"},
-                            {value: 11, name: "香港"},
-                            {value: 11, name: "澳门"},
-                        ]
-                    }
-                ]
-            }
-            fromChart.setOption(option)
-            this.fromChart = fromChart
-        },
-        update(){
-            this.updateAgeChart()
-            this.updateTimeChart()
-        },
         updateAgeChart(){
-            queryAgeCount().then(res => {
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
+
+            queryAgeCount({
+                startTime: startTime,
+                endTime: endTime,
+                ageTime: ageTime,
+                barIds: barIds
+            }).then(res => {
                 let data = res.data
 
                 let secondData = [
@@ -299,56 +274,118 @@ export default {
                 this.ageChart.setOption(option)
             })
         },
-        updateTimeChart(){
-            let range = this.$store.getters.timeRange
-            queryInternetTimeDistribution({
-                startTime: Math.floor(range.startTime / 1000),
-                endTime: Math.floor(range.endTime / 1000)
-            }).then(res => {
-                let rawdata = res.data
-                let data = []
-
-                let min = Infinity
-                let max = 0
-
-                for (let i = 0; i < 7; i++){
-                    for (let j = 0; j < 24; j++){
-                        data.push([i, j, rawdata[i * 24 + j]])
-                        console.log(i,j,rawdata[i * 24 + j])
-                        if (max < rawdata[i * 24 + j]){
-                            max = rawdata[i * 24 + j]
-                        }
-
-                        if (min > rawdata[i * 24 + j]){
-                            min = rawdata[i * 24 + j]
-                        }
+        update(){
+            this.updateAgeChart()
+            this.updateTimeChart()
+            this.updateFromChart()
+        },
+        initFromChart(){
+            let fromChart = echarts.init(this.$refs.from)
+            let option = {
+                // tooltip: {
+                //     trigger: "item",
+                //     formatter: "{a} <br/>{b}: {c} ({d}%)"
+                // },
+                // legend: {
+                //     orient: "vertical",
+                //     x: "left",
+                //     data: ["本地人", "外地人"]
+                // },
+                series: [
+                    {
+                        name: "访问来源",
+                        type: "pie",
+                        radius: ["80%", "90%"],
+                        label: {
+                            normal: {
+                                show: false,
+                                position: "center"
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: "30",
+                                    fontWeight: "bold"
+                                }
+                            }
+                        },
+                        avoidLabelOverlap: false,
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: []
+                    },
+                    {
+                        name: "访问来源",
+                        type: "pie",
+                        radius: ["0%", "70%"],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: "center"
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: "30",
+                                    fontWeight: "bold"
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: []
                     }
-                }
-                console.log(data)
-                data = data.map(function (item) {
-                    return [item[1], item[0], item[2]]
-                })
-
-                let secondData = [
-                    {value: 0, name: "未成年"},
-                    {value: 0, name: "成年人"},
-                    {value: 0, name: "老年人"},
                 ]
+            }
+            fromChart.setOption(option)
+            this.fromChart = fromChart
+        },
+        updateFromChart(){
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
 
-                let option = {
+            queryProvinceUsercount({
+                startTime: startTime,
+                endTime: endTime,
+                ageTime: ageTime,
+                barIds: barIds
+            }).then(res => {
+                let rdata = res.data
+                let data = Object.keys(rdata).map(key => {
+                    return {
+                        name: key,
+                        value: rdata[key]
+                    }
+                })
+                let chongqingIndex = data.findIndex(d => d.name === "重庆")
+                data.splice(0, 0, data.splice(chongqingIndex, 1)[0])
+
+                let localData = {value: data[0].value, name: "本地人"}
+                let otherData = {value: data.reduce((sum, d) => sum + d.value, 0) - data[0].value, name: "外地人"}
+                console.log([localData, otherData])
+                this.fromChart.setOption({
                     series: [
                         {
-                            data: data,
-                            symbolSize: function (val) {
-                                let data = val[2]
-                                let p = (data - min) / (max - min)
-                                return p * 10
-                            },
+                            data: [
+                                localData,
+                                otherData,
+                            ]
+                        },
+                        {
+                            data
                         }
-                    ],
-                }
-
-                this.timeChart.setOption(option)
+                    ]
+                })
             })
         }
     }

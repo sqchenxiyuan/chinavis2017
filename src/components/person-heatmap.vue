@@ -5,6 +5,7 @@
 <script>
 import echarts from "echarts"
 
+import eventBus from "./eventbus.js"
 import { queryPersonTimeCount } from "../interfaces/bars.js"
 
 export default {
@@ -16,14 +17,12 @@ export default {
         }
     },
     mounted(){
+        eventBus.$on("timeRangeUpdate", this.updateData)
+        eventBus.$on("selectedBarsUpdate", this.updateData)
+        eventBus.$on("ageInternetTimeRangeUpdate", this.updateData)
+
         this.initData()
-        queryPersonTimeCount({
-            maxTime: 24 * 3600,
-            interval: 3600,
-        }).then(res => {
-            let data = res.data
-            this.updateData(data)
-        })
+        this.updateData()
     },
     methods: {
         initData(){
@@ -38,7 +37,7 @@ export default {
                 brush: {
                     toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
                     throttleType: "debounce",
-                    throttleDelay: 700
+                    throttleDelay: 300
                 },
                 xAxis: {
                     type: "category",
@@ -110,49 +109,68 @@ export default {
 
             this.myChart = myChart
         },
-        updateData(agetimecountData){
-            let myChart = this.myChart
+        updateData(){
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
 
-            let age = 100
-            let time = 24
+            queryPersonTimeCount({
+                startTime,
+                endTime,
+                barIds,
+                maxTime: 24 * 3600,
+                interval: 3600,
+            }).then(res => {
+                let agetimecountData = res.data
+                let myChart = this.myChart
 
-            let xData = []
-            let yData = []
+                let age = 100
+                let time = 24
 
-            for (let i = 0; i <= time; i++){
-                xData.push(i)
-            } 
+                let xData = []
+                let yData = []
 
-            for (let i = 0; i <= age; i++){
-                yData.push(i)
-            } 
+                for (let i = 0; i <= time; i++){
+                    xData.push(i)
+                } 
 
-            let heatmapdata = []
-            let scatterdata = []
-            agetimecountData.forEach(d => {
-                if (d.count > 0){
-                    heatmapdata.push([d.internetTime, d.age, d.count])
-                }
-                scatterdata.push([d.internetTime, d.age, 1])
-            })
-            this.scatterdata = scatterdata
+                for (let i = 0; i <= age; i++){
+                    yData.push(i)
+                } 
 
-            myChart.setOption({
-                xAxis: {
-                    data: xData
-                },
-                yAxis: {
-                    data: yData
-                },
-                series: [{
-                    data: scatterdata,
-                }, {
-                    data: heatmapdata,
-                }]
+                let heatmapdata = []
+                let scatterdata = []
+                agetimecountData.forEach(d => {
+                    if (d.count > 0){
+                        heatmapdata.push([d.internetTime, d.age, d.count])
+                    }
+                    scatterdata.push([d.internetTime, d.age, 1])
+                })
+                this.scatterdata = scatterdata
+
+                myChart.setOption({
+                    xAxis: {
+                        data: xData
+                    },
+                    yAxis: {
+                        data: yData
+                    },
+                    series: [{
+                        data: scatterdata,
+                    }, {
+                        data: heatmapdata,
+                    }]
+                })
             })
         },
         computeNewRange(dataIndex){
-            if(dataIndex.length === 0) return 
+            if (dataIndex.length === 0){
+                if (this.$store.getters.ageTimeRange.length > 0){
+                    this.$store.commit("setAgeInternetTimeRange", [])
+                }
+                return
+            } 
 
             let datas = this.scatterdata
             let HOUR = 3600
@@ -187,6 +205,10 @@ export default {
                 let timeItem = [data[0], data[0]]
                 times.push(timeItem)
                 for (let i = 1;i < data.length; i++){
+                    if (data[i] === 24){
+                        data[i] = 24 * 300
+                    }
+
                     if (data[i] === data[i - 1] + HOUR){
                         timeItem[1] += HOUR
                     } else {

@@ -15,11 +15,11 @@ export default {
             myChart: null,
         }
     },
-    created(){
+    mounted(){
         eventBus.$on("timeRangeUpdate", this.somethingsUpdate)
         eventBus.$on("selectedBarsUpdate", this.somethingsUpdate)
-    },
-    mounted(){
+        eventBus.$on("ageInternetTimeRangeUpdate", this.somethingsUpdate)
+
         this.initData()
         this.somethingsUpdate()
     },
@@ -152,20 +152,14 @@ export default {
                 selelctedBars = selelctedBars.map(bar => bar.id).join(",")
             }
 
-            // if (endTime - startTime > 7 * 24 * 3600){
-            //     interval = 24 * 3600
-            // } else if (endTime - startTime > 24 * 3600){
-            //     interval = 3600
-            // } else {
-            //     interval = 600
-            // }
-            // console.log(endTime - startTime, interval)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
 
             querySurfTheInternetRecords({
                 startTime: startTime,
                 endTime: endTime,
                 interval: interval,
-                barIds: selelctedBars
+                barIds: selelctedBars,
+                ageTime: ageTime
             }).then(res => {
                 let recordData = res.data
                 this.updateData(recordData)
