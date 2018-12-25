@@ -19,6 +19,7 @@
                 <button @click="updateMapType('INTERNET_RECORD')">上网记录</button>
                 <button @click="updateMapType('FLOAT_PERSON')">流动人口</button>
                 <button @click="updateMapType('UNDER_AGE')">未成年人口</button>
+                <button @click="downloadData">下载筛选数据</button>
             </div>
         </div>
         <div class="right-container">
@@ -55,8 +56,10 @@ import personFromMap from "./components/person-from-map.vue"
 import barsList from "./components/bars-list.vue"
 import barsStatistics from "./components/bars-statistics.vue"
 
+import { exportData } from "./interfaces/bars.js"
+
 export default {
-    methods:{
+    methods: {
         startSelect(){
             this.$refs.baidumap.startSelect()
         },
@@ -65,6 +68,20 @@ export default {
         },
         updateMapType(type){
             this.$refs.baidumap.updateType(type)
+        },
+        downloadData(){
+            let timerange = this.$store.getters.timeRange
+            let startTime = Math.floor(timerange.startTime / 1000)
+            let endTime = Math.floor(timerange.endTime / 1000)
+            let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
+
+            exportData({
+                startTime: startTime,
+                endTime: endTime,
+                ageTime: ageTime,
+                barIds: barIds
+            })
         }
     },
     components: {

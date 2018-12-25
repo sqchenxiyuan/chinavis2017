@@ -1,4 +1,5 @@
 import axios from "./axios.js"
+import querystring from "querystring"
 
 export function queryBars(obj = {}){
     let {
@@ -112,4 +113,20 @@ export function queryPersonTimeCount(obj = {}){
     if (barIds) formdata.set("barIds", barIds)
 
     return axios.post("http://10.10.9.233:8080/age_time", formdata)
+}
+
+export function exportData(){
+    let {
+        startTime,
+        endTime,
+        barIds,
+        ageTime
+    } = obj
+
+    window.open(`http://10.10.9.233:8080/export-data?${querystring.stringify({
+        startTime,
+        endTime,
+        barIds,
+        ageTime
+    })}`)
 }
