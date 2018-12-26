@@ -19,6 +19,7 @@ export default {
         eventBus.$on("timeRangeUpdate", this.somethingsUpdate)
         eventBus.$on("selectedBarsUpdate", this.somethingsUpdate)
         eventBus.$on("ageInternetTimeRangeUpdate", this.somethingsUpdate)
+        eventBus.$on("timeIntervalUpdate", this.somethingsUpdate)
 
         this.initData()
         this.somethingsUpdate()
@@ -43,18 +44,8 @@ export default {
                         color: "#fff"
                     }
                 },
-                brush: {
-                    toolbox: ["lineX", "keep", "clear"],
-                    xAxisIndex: 0
-                },
-                dataZoom: [
-                    // {
-                    //     show: true,
-                    //     realtime: true,
-                    //     start: 0,
-                    //     end: 100
-                    // },
-                    {
+                dataZoom: [      
+                    {      
                         type: "inside",
                         realtime: true,
                         start: 0,
@@ -129,6 +120,11 @@ export default {
             }
             myChart.setOption(option)
 
+            myChart.on("brushselected", e => {
+                console.log(e)
+                this.selelctedTime(e.batch[0].selected[0].dataIndex)
+            })
+
             this.myChart = myChart
         },
         updateData(recordData){
@@ -167,16 +163,7 @@ export default {
             let range = this.$store.getters.timeRange
             let startTime = Math.floor(range.startTime / 1000)
             let endTime = Math.floor(range.endTime / 1000)
-            let interval = 24 * 3600
-            
-            let timeWidth = endTime - startTime
-            let safeWidth = timeWidth / 40
-            if (safeWidth > 3600){
-                interval = Math.ceil(safeWidth / 3600) * 3600
-            } else if (safeWidth > 60){
-                interval = Math.ceil(safeWidth / 60) * 60
-            }
-
+            let interval = this.$store.getters.timeInterval
             let bars = this.$store.getters.getBars
             let selelctedBars = this.$store.getters.selectedBars
             if (bars.length === selelctedBars.length){
@@ -198,6 +185,9 @@ export default {
                 this.updateData(recordData)
             })
         },
+        selelctedTime(dataIndex){
+            console.log(dataIndex)
+        }
     }
 }
 </script>

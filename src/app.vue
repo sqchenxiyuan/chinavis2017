@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="center-container">
-            <div class="controler">
+            <div class="controler" style="flex: 6">
                 <button @click="startSelect" style="padding:0 11.5px;">选择</button>
                 <button @click="clearSelect">清除选择</button>
                 <button :class="{'active':activeType==='BARS'}" class="group1" @click="updateMapType('BARS')" style="padding:0 11px;">网吧</button>
@@ -20,6 +20,13 @@
                 <button :class="{'active':activeType==='FLOAT_PERSON'}" @click="updateMapType('FLOAT_PERSON')">流动人口</button>
                 <button :class="{'active':activeType==='UNDER_AGE'}" @click="updateMapType('UNDER_AGE')">未成年人口</button>
                 <button class="group2" @click="downloadData">下载筛选数据</button>
+            </div>
+            <div style="flex: 4">
+                <button :class="{'active':timeInterval === 24 * 3600}" @click="selelctShowTimeTnterval(24 * 3600)">1D</button>
+                <button :class="{'active':timeInterval === 12 * 3600}" @click="selelctShowTimeTnterval(12 * 3600)">12H</button>
+                <button :class="{'active':timeInterval === 6 * 3600}" @click="selelctShowTimeTnterval(6 * 3600)">6H</button>
+                <button :class="{'active':timeInterval === 3 * 3600}" @click="selelctShowTimeTnterval(3 * 3600)">3H</button>
+                <button :class="{'active':timeInterval === 3600}" @click="selelctShowTimeTnterval(3600)">1H</button>
             </div>
         </div>
         <div class="right-container">
@@ -63,6 +70,11 @@ export default {
             activeType: "BARS"
         }
     },
+    computed: {
+        timeInterval(){
+            return this.$store.getters.timeInterval
+        }
+    },
     methods: {
         startSelect(){
             this.$refs.baidumap.startSelect()
@@ -87,6 +99,9 @@ export default {
                 ageTime: ageTime,
                 barIds: barIds
             })
+        },
+        selelctShowTimeTnterval(time){
+            this.$store.commit("setTimeInterval", time)
         }
     },
     components: {
@@ -139,25 +154,12 @@ export default {
 
     .center-container{
         width: 50px;
-        .active{
-            background-color: #23262D;
-            border: 1px solid #fff;
-            border-left: none; 
-        }
-        button{
-            background-color:  #404a59;
-            border: none;
-            border-top-right-radius: 3px;
-            border-bottom-right-radius: 3px;
-            font-family: '微软雅黑';
-            color:#F5F5F5;
-            outline: none;
-            cursor: pointer;
-        }
-         .group1,.group2{
-                margin-top: 15px;
-            }
+        display: flex;
+        flex-direction: column;
         
+        .group1,.group2{
+            margin-top: 15px;
+        }
     }
    
     
@@ -202,6 +204,23 @@ export default {
         .controler-conatiner{
             height: 50px;
         }
+    }
+}
+
+button{
+    background-color:  #404a59;
+    border: none;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    font-family: '微软雅黑';
+    color:#F5F5F5;
+    outline: none;
+    cursor: pointer;
+
+    &.active{
+        background-color: #23262D;
+        border: 1px solid #fff;
+        border-left: none; 
     }
 }
 </style>

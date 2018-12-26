@@ -1,9 +1,12 @@
 <template>
     <div class="bars-statistic-container">
-        <div ref="time" class="internet-time-distribution"></div>
-        <div class="others">
-            <div ref="age" class="age-distribution"></div>
-            <div ref="from" class="from-distribution"></div>
+        <div style="height: 20px; background: rgb(51,51,51); color:#fff; text-align:center">{{singleBar ? singleBar.name : "全部网吧"}}</div>
+        <div class="charts-container">
+            <div ref="time" class="internet-time-distribution"></div>
+            <div class="others">
+                <div ref="age" class="age-distribution"></div>
+                <div ref="from" class="from-distribution"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -20,6 +23,11 @@ export default {
         return {
             ageChart: null,
             fromChart: null
+        }
+    },
+    computed: {
+        singleBar(){
+            return this.$store.getters.singleBar
         }
     },
     mounted(){
@@ -44,16 +52,25 @@ export default {
                 "7", "8", "9", "10", "11", "12", 
                 "13", "14", "15", "16", "17",
                 "18", "19", "20", "21", "22", "23"]
-            let days = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期天"]
+            let days = ["一", "二", "三", "四", "五", "六", "天"]
 
             let option = {
                 tooltip: {
+                    trigger: "item",
                     formatter: function (params) {
-                        return params.value[2] + " commits in " + hours[params.value[1]] + " of " + days[params.value[0]]
+                        return `${params.value[2]}人在星期${days[params.value[1]]}${hours[params.value[0]]}点上网`
                     },
+                },
+                grid: {
+                    top: "30px",
+                    left: "30px",
+                    right: "30px",
+                    bottom: "30px",
                 },
                 xAxis: {
                     type: "category",
+                    name: "时间(一天)",
+                    nameLocation: "center",
                     data: hours,
                     boundaryGap: false,
                     splitLine: {
@@ -70,13 +87,9 @@ export default {
                         // color:'#fff'
                     }
                 },
-                brush: {
-                    toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
-                    throttleType: "debounce",
-                    throttleDelay: 700,
-                },
                 yAxis: {
                     type: "category",
+                    name: "星期",
                     data: days,
                     axisLine: {
                         show: false
@@ -170,6 +183,7 @@ export default {
                 },
                 series: [
                     {
+                        name: "年龄数据",
                         type: "pie",
                         radius: ["50%", "70%"],
                         avoidLabelOverlap: false,
@@ -180,10 +194,11 @@ export default {
                             },
                             emphasis: {
                                 show: true,
-                                textStyle: {
-                                    fontSize: "30",
-                                    fontWeight: "bold"
-                                }
+                                color: "#fff",
+                                textBorderWidth: 3,
+                                textBorderColor: "#000",
+                                fontSize: "30",
+                                fontWeight: "bold"
                             }
                         },
                         labelLine: {
@@ -194,6 +209,7 @@ export default {
                         data: []
                     },
                     {
+                        name: "总体数据",
                         type: "pie",
                         radius: ["0%", "32%"],
                         avoidLabelOverlap: false,
@@ -204,10 +220,11 @@ export default {
                             },
                             emphasis: {
                                 show: true,
-                                textStyle: {
-                                    fontSize: "30",
-                                    fontWeight: "bold"
-                                }
+                                color: "#fff",
+                                textBorderWidth: 3,
+                                textBorderColor: "#000",
+                                fontSize: "30",
+                                fontWeight: "bold"
                             }
                         },
                         labelLine: {
@@ -301,10 +318,11 @@ export default {
                             },
                             emphasis: {
                                 show: true,
-                                textStyle: {
-                                    fontSize: "30",
-                                    fontWeight: "bold"
-                                }
+                                color: "#fff",
+                                textBorderWidth: 3,
+                                textBorderColor: "#000",
+                                fontSize: "30",
+                                fontWeight: "bold"
                             }
                         },
                         avoidLabelOverlap: false,
@@ -327,10 +345,11 @@ export default {
                             },
                             emphasis: {
                                 show: true,
-                                textStyle: {
-                                    fontSize: "30",
-                                    fontWeight: "bold"
-                                }
+                                color: "#fff",
+                                textBorderWidth: 3,
+                                textBorderColor: "#000",
+                                fontSize: "30",
+                                fontWeight: "bold"
                             }
                         },
                         labelLine: {
@@ -398,6 +417,12 @@ export default {
     border: 1px solid black;
     box-sizing: border-box;
     display: flex;
+    flex-direction: column;
+}
+
+.charts-container{
+    display: flex;
+    flex: 1;
 
     .internet-time-distribution{
         flex: 2;

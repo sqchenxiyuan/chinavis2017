@@ -1,8 +1,22 @@
 <template>
     <div class="bars-list-container">
-        <div class="list-title">网吧列表</div>
+        <div class="list-title">网吧列表
+        </div>
+        <div class="list-title">
+            <select v-model="sortType" class="list-select">
+                <option value="COUNT">数量</option>
+                <option value="UNDER">未成年</option>
+                <option value="UNDERP">未成年比例</option>
+            </select>
+            <!-- <button style="float: right" @click="changeSortType">{{sortType === "COUNT" ? "数量" : "未成年"}}</button> -->
+        </div>
         <div class="list-content">
-            <div class="bar-item" v-for="bar in bars" :key="bar.id" @click="selectBar(bar)">{{bar.name}}</div>
+            <div class="bar-item" v-for="bar in bars" :class="{warning: bar.under_age_count > 0}" :key="bar.id" @click="selectBar(bar)">
+                {{bar.name}}
+                <span v-if="sortType === 'COUNT'" style="float: right">{{bar.count}}</span>
+                <span v-if="sortType === 'UNDER'" style="float: right">{{bar.under_age_count}}</span>
+                <span v-if="sortType === 'UNDERP'" style="float: right">{{bar.p}}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -15,12 +29,18 @@ import { queryBarsInfo } from "../interfaces/bars.js"
 export default {
     data(){
         return {
-            bars: []
+            bars: [],
+            sortType: "COUNT"
         }
     },
     computed: {
         barsMap(){
             return this.$store.getters.barsMap
+        }
+    },
+    watch: {
+        sortType(nv){
+            this.changeSortType()
         }
     },
     mounted(){
@@ -55,11 +75,25 @@ export default {
                         data.name = "未知网吧"
                     }
                     data.id = data.barId
-                })
-                barsdata.sort((a, b) => {
-                    return a.id - b.id
+                    data.p = (data.under_age_count / data.count * 100).toFixed(2)
                 })
                 this.bars = barsdata 
+                this.changeSortType()
+            })
+        },
+        changeSortType(){
+            this.bars.sort((a, b) => {
+                if (a.count === b.count){
+                    return a.id - b.id
+                } else {
+                    if (this.sortType === "COUNT"){
+                        return b.count - a.count
+                    } else if (this.sortType === "UNDER") {
+                        return b.under_age_count - a.under_age_count
+                    } else {
+                        return b.p - a.p
+                    }
+                }
             })
         }
     },
@@ -86,6 +120,7 @@ export default {
     line-height: 30px;
     box-sizing: border-box;
     border: 1px solid black;
+    position: relative;
 }
 
 .list-content{
@@ -101,7 +136,29 @@ export default {
             background: black;
             color: white;
         }
+
+        &.warning{
+            background: #dd6b66;
+            color: white;
+
+            &:hover{
+                background: darken(#dd6b66, 20%);
+            }
+        }
     }
+}
+
+.list-select{
+    position: absolute;
+    display: block;
+    top: 0;
+    left:0;
+    width: 100%;
+    height: 100%;
+
+    color: #fff;
+    background: rgb(35, 38, 45);
+    border: 0;
 }
 </style>
 

@@ -5,6 +5,7 @@ let storeConfig = {
     state: {
         bars: [],
         
+        timeInterval: 24 * 3600, //时间间隔
         singleBar: null,
         selectedBars: [],
         timeRange: {
@@ -37,6 +38,9 @@ let storeConfig = {
         },
         ageTimeRange(state){
             return state.ageInternetTimeRange
+        },
+        timeInterval(state){
+            return state.timeInterval
         }
     },
     mutations: {
@@ -61,6 +65,10 @@ let storeConfig = {
             state.singleBar = null
             state.ageInternetTimeRange = range
             state.bus.$emit("ageInternetTimeRangeUpdate")
+        },
+        setTimeInterval(state, interval){
+            state.timeInterval = interval
+            state.bus.$emit("timeIntervalUpdate")
         }
     },
     actions: {
