@@ -1,6 +1,6 @@
 <template>
     <div class="bars-statistic-container">
-        <div style="height: 20px; background: rgb(51,51,51); color:#fff; text-align:center">{{singleBar ? singleBar.name : "全部网吧"}}</div>
+        <div style="height: 20px; background: rgb(51,51,51); color:#fff; text-align:center">{{singleBar ? `${singleBar.name}(${singleBar.id})` : "全部网吧"}}</div>
         <div class="charts-container">
             <div ref="time" class="internet-time-distribution"></div>
             <div class="others">
@@ -66,6 +66,15 @@ export default {
                     left: "30px",
                     right: "30px",
                     bottom: "30px",
+                },
+                visualMap: {
+                    min: 0,
+                    max: 1000,
+                    calculable: true,
+                    orient: "horizontal",
+                    show: false,
+                    left: "center",
+                    top: "0%",
                 },
                 xAxis: {
                     type: "category",
@@ -159,12 +168,16 @@ export default {
                 ]
 
                 let option = {
+                    visualMap: {
+                        min: min,
+                        max: max,
+                    },
                     series: [
                         {
                             data: data,
                             symbolSize: function (val) {
                                 let data = val[2]
-                                let p = (data - min) / (max - min)
+                                let p = (data - 0) / (max - 0)
                                 return p * 10
                             },
                         }
@@ -297,15 +310,10 @@ export default {
         initFromChart(){
             let fromChart = echarts.init(this.$refs.from, "dark")
             let option = {
-                // tooltip: {
-                //     trigger: "item",
-                //     formatter: "{a} <br/>{b}: {c} ({d}%)"
-                // },
-                // legend: {
-                //     orient: "vertical",
-                //     x: "left",
-                //     data: ["本地人", "外地人"]
-                // },
+                tooltip: {
+                    trigger: "item",
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
                 series: [
                     {
                         name: "访问来源",

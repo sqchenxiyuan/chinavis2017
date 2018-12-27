@@ -29,26 +29,32 @@ export default {
             let myChart = echarts.init(this.$refs.records, "dark")
             let option = {
                 tooltip: {
-                    trigger: "none",
-                    axisPointer: {
-                        type: "cross"
-                    },  
+                    trigger: "item",
+                    formatter: params => {
+                        let data = params.value
+                        return `${data[1]}岁-${data[0]}小时：${data[2]}`   
+                    }
                 },
                 brush: {
-                    toolbox: ["polygon", "lineX", "lineY", "keep", "clear"],
+                    toolbox: ["polygon", "keep", "clear"],
                     throttleType: "debounce",
                     throttleDelay: 300
                 },
                 xAxis: {
+                    name: "上网时长",
+                    nameLocation: "center",
                     type: "category",
                     data: [],
                 },
                 yAxis: {
+                    name: "上网年龄",
                     type: "category",
                     data: [],
                 },
                 grid: {
-                    show: true,
+                    bottom: "30px",
+                    left: "30px",
+                    right: "10px"
                 },
                 visualMap: {
                     type: "continuous",
