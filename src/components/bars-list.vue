@@ -48,6 +48,7 @@ export default {
         eventBus.$on("selectedBarsUpdate", this.update)
         eventBus.$on("ageInternetTimeRangeUpdate", this.update)
         eventBus.$on("singleBarUpdate", this.update)
+        eventBus.$on("typeUpdate", this.update)
 
         this.update()
     },
@@ -60,11 +61,13 @@ export default {
             let startTime = Math.floor(timerange.startTime / 1000)
             let endTime = Math.floor(timerange.endTime / 1000)
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let type = this.$store.getters.type
 
             queryBarsInfo({
                 startTime,
                 endTime,
-                ageTime
+                ageTime,
+                type
             }).then(res => {
                 let barsdata = res.data
                 barsdata = barsdata.filter(data => data.count > 0)

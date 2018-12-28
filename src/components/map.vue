@@ -47,6 +47,7 @@ export default {
         eventBus.$on("timeRangeUpdate", this.updateChart)
         eventBus.$on("selectedBarsUpdate", this.updateChart)
         eventBus.$on("ageInternetTimeRangeUpdate", this.updateChart)
+        eventBus.$on("typeUpdate", this.update)
 
         this.initChart()
         this.updateChart()
@@ -179,11 +180,13 @@ export default {
             let startTime = Math.floor(timerange.startTime / 1000)
             let endTime = Math.floor(timerange.endTime / 1000)
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let type = this.$store.getters.type
 
             queryBarsInfo({
                 startTime,
                 endTime,
-                ageTime
+                ageTime,
+                type
             }).then(res => {
                 let myChart = this.myChart
                 let data = res.data
@@ -215,11 +218,13 @@ export default {
             let startTime = Math.floor(timerange.startTime / 1000)
             let endTime = Math.floor(timerange.endTime / 1000)
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let type = this.$store.getters.type
 
             queryBarsInfo({
                 startTime,
                 endTime,
-                ageTime
+                ageTime,
+                type
             }).then(res => {
                 let myChart = this.myChart
                 let data = res.data
@@ -251,11 +256,13 @@ export default {
             let startTime = Math.floor(timerange.startTime / 1000)
             let endTime = Math.floor(timerange.endTime / 1000)
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let type = this.$store.getters.type
 
             queryBarsInfo({
                 startTime,
                 endTime,
-                ageTime
+                ageTime,
+                type
             }).then(res => {
                 let myChart = this.myChart
                 let data = res.data

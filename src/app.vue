@@ -17,9 +17,12 @@
                 <button @click="clearSelect">清除选择</button>
                 <button :class="{'active':activeType==='BARS'}" class="group1" @click="updateMapType('BARS')" style="padding:0 11px;">网吧</button>
                 <button :class="{'active':activeType==='INTERNET_RECORD'}" @click="updateMapType('INTERNET_RECORD')">上网记录</button>
-                <button :class="{'active':activeType==='UNDER_AGE'}" @click="updateMapType('UNDER_AGE')">未成年</button>
-                <button :class="{'active':activeType==='FLOAT_PERSON'}" @click="updateMapType('FLOAT_PERSON')">流动人口</button>
+                
                 <button class="group2" @click="downloadData">下载数据</button>
+
+                <button class="group2" :class="{'active':type===0}" @click="updateType(0)">全部</button>
+                <button :class="{'active':type===1}" @click="updateType(1)">未成年</button>
+                <button :class="{'active':type===2}" @click="updateType(2)">流动人口</button>
             </div>
             <div style="flex: 4">
                 <button :class="{'active':timeInterval === 24 * 3600}" @click="selelctShowTimeTnterval(24 * 3600)">1D</button>
@@ -73,6 +76,9 @@ export default {
     computed: {
         timeInterval(){
             return this.$store.getters.timeInterval
+        },
+        type(){
+            return this.$store.getters.type
         }
     },
     methods: {
@@ -85,6 +91,9 @@ export default {
         updateMapType(type){
             this.activeType = type
             this.$refs.baidumap.updateType(type)
+        },
+        updateType(type){
+            this.$store.commit("setType", type)
         },
         downloadData(){
             let timerange = this.$store.getters.timeRange

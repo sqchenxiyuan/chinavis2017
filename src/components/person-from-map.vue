@@ -18,6 +18,7 @@ export default {
         eventBus.$on("timeRangeUpdate", this.updateChart)
         eventBus.$on("selectedBarsUpdate", this.updateChart)
         eventBus.$on("ageInternetTimeRangeUpdate", this.updateChart)
+        eventBus.$on("typeUpdate", this.updateChart)
 
         this.initData()
         this.updateChart()
@@ -104,12 +105,14 @@ export default {
             let endTime = Math.floor(timerange.endTime / 1000)
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
             let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
+            let type = this.$store.getters.type
 
             queryProvinceUsercount({
                 startTime: startTime,
                 endTime: endTime,
                 ageTime: ageTime,
-                barIds: barIds
+                barIds: barIds,
+                type
             }).then(res => {
                 let rdata = res.data
                 let max = 0

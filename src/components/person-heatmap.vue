@@ -20,6 +20,7 @@ export default {
         eventBus.$on("timeRangeUpdate", this.updateData)
         eventBus.$on("selectedBarsUpdate", this.updateData)
         eventBus.$on("ageInternetTimeRangeUpdate", this.updateData)
+        eventBus.$on("typeUpdate", this.updateData)
 
         this.initData()
         this.updateData()
@@ -98,6 +99,7 @@ export default {
             let startTime = Math.floor(timerange.startTime / 1000)
             let endTime = Math.floor(timerange.endTime / 1000)
             let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
+            let type = this.$store.getters.type
 
             queryPersonTimeCount({
                 startTime,
@@ -105,6 +107,7 @@ export default {
                 barIds,
                 maxTime: 24 * 3600,
                 interval: 3600,
+                type
             }).then(res => {
                 let agetimecountData = res.data
                 let myChart = this.myChart

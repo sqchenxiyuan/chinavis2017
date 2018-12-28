@@ -5,6 +5,7 @@ let storeConfig = {
     state: {
         bars: [],
         
+        type: 0,
         timeInterval: 24 * 3600, //时间间隔
         singleBar: null,
         selectedBars: [],
@@ -41,6 +42,9 @@ let storeConfig = {
         },
         timeInterval(state){
             return state.timeInterval
+        },
+        type(state){
+            return state.type
         }
     },
     mutations: {
@@ -69,6 +73,10 @@ let storeConfig = {
         setTimeInterval(state, interval){
             state.timeInterval = interval
             state.bus.$emit("timeIntervalUpdate")
+        },
+        setType(state, type){
+            state.type = type
+            state.bus.$emit("typeUpdate")
         }
     },
     actions: {

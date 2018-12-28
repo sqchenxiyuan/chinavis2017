@@ -35,6 +35,7 @@ export default {
         eventBus.$on("selectedBarsUpdate", this.update)
         eventBus.$on("ageInternetTimeRangeUpdate", this.update)
         eventBus.$on("singleBarUpdate", this.update)
+        eventBus.$on("typeUpdate", this.update)
 
         this.initChart()
         this.update()
@@ -131,13 +132,15 @@ export default {
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
             let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
             if (this.$store.getters.singleBar) barIds = this.$store.getters.singleBar.id
+            let type = this.$store.getters.type
 
             let range = this.$store.getters.timeRange
             queryInternetTimeDistribution({
                 startTime: startTime,
                 endTime: endTime,
                 ageTime: ageTime,
-                barIds: barIds
+                barIds: barIds,
+                type
             }).then(res => {
                 let rawdata = res.data
                 let data = []
@@ -259,12 +262,14 @@ export default {
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
             let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
             if (this.$store.getters.singleBar) barIds = this.$store.getters.singleBar.id
+            let type = this.$store.getters.type
 
             queryAgeCount({
                 startTime: startTime,
                 endTime: endTime,
                 ageTime: ageTime,
-                barIds: barIds
+                barIds: barIds,
+                type
             }).then(res => {
                 let data = res.data
 
@@ -379,12 +384,14 @@ export default {
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
             let barIds = this.$store.getters.selectedBars.map(bar => bar.id).join(",")
             if (this.$store.getters.singleBar) barIds = this.$store.getters.singleBar.id
+            let type = this.$store.getters.type
 
             queryProvinceUsercount({
                 startTime: startTime,
                 endTime: endTime,
                 ageTime: ageTime,
-                barIds: barIds
+                barIds: barIds,
+                type
             }).then(res => {
                 let rdata = res.data
                 let data = Object.keys(rdata).map(key => {

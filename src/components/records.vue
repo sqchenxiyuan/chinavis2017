@@ -20,6 +20,7 @@ export default {
         eventBus.$on("selectedBarsUpdate", this.somethingsUpdate)
         eventBus.$on("ageInternetTimeRangeUpdate", this.somethingsUpdate)
         eventBus.$on("timeIntervalUpdate", this.somethingsUpdate)
+        eventBus.$on("typeUpdate", this.somethingsUpdate)
 
         this.initData()
         this.somethingsUpdate()
@@ -173,13 +174,15 @@ export default {
             }
 
             let ageTime = JSON.stringify(this.$store.getters.ageTimeRange)
+            let type = this.$store.getters.type
 
             querySurfTheInternetRecords({
                 startTime: startTime,
                 endTime: endTime,
                 interval: interval,
                 barIds: selelctedBars,
-                ageTime: ageTime
+                ageTime: ageTime,
+                type
             }).then(res => {
                 let recordData = res.data
                 this.updateData(recordData)

@@ -16,13 +16,15 @@ export function querySurfTheInternetRecords(obj = {}){
         endTime,
         interval,
         barIds,
-        ageTime
+        ageTime,
+        type = 0
     } = obj
 
     let formdata = new FormData()
     formdata.set("startTime", startTime)
     formdata.set("endTime", endTime)
     formdata.set("interval", interval)
+    formdata.set("type", type)
     if (barIds) formdata.set("barIds", barIds)
     if (ageTime) formdata.set("ageTime", ageTime)
 
@@ -33,11 +35,13 @@ export function queryBarsInfo(obj = {}){
     let {
         startTime,
         endTime,
-        ageTime
+        ageTime,
+        type = 0
     } = obj
 
 
     let formdata = new FormData()
+    formdata.set("type", type)
     if (startTime) formdata.set("startTime", startTime)
     if (endTime) formdata.set("endTime", endTime)
     if (ageTime) formdata.set("ageTime", ageTime)
@@ -51,9 +55,11 @@ export function queryInternetTimeDistribution(obj = {}){
         endTime,
         ageTime,
         barIds,
+        type,
     } = obj
 
     let formdata = new FormData()
+    formdata.set("type", type)
     if (startTime) formdata.set("startTime", startTime)
     if (endTime) formdata.set("endTime", endTime)
     if (barIds) formdata.set("barIds", barIds)
@@ -68,9 +74,11 @@ export function queryAgeCount(obj = {}){
         endTime,
         ageTime,
         barIds,
+        type = 0
     } = obj
 
     let formdata = new FormData()
+    formdata.set("type", type)
     if (startTime) formdata.set("startTime", startTime)
     if (endTime) formdata.set("endTime", endTime)
     if (barIds) formdata.set("barIds", barIds)
@@ -85,9 +93,11 @@ export function queryProvinceUsercount(obj = {}){
         endTime,
         ageTime,
         barIds,
+        type = 0
     } = obj
 
     let formdata = new FormData()
+    formdata.set("type", type)
     if (startTime) formdata.set("startTime", startTime)
     if (endTime) formdata.set("endTime", endTime)
     if (barIds) formdata.set("barIds", barIds)
@@ -103,11 +113,13 @@ export function queryPersonTimeCount(obj = {}){
         barIds,
         maxTime,
         interval,
+        type = 0
     } = obj
 
     let formdata = new FormData()
     formdata.set("maxInternetTime", maxTime)
     formdata.set("interval", interval)
+    formdata.set("type", type)
     if (startTime) formdata.set("startTime", startTime)
     if (endTime) formdata.set("endTime", endTime)
     if (barIds) formdata.set("barIds", barIds)
