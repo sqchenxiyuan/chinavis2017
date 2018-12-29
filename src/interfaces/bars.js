@@ -7,7 +7,7 @@ export function queryBars(obj = {}){
         limit
     } = obj
 
-    return axios.get("http://10.10.9.233:8080/bars")
+    return axios.get("/bars")
 }
 
 export function querySurfTheInternetRecords(obj = {}){
@@ -28,7 +28,7 @@ export function querySurfTheInternetRecords(obj = {}){
     if (barIds) formdata.set("barIds", barIds)
     if (ageTime) formdata.set("ageTime", ageTime)
 
-    return axios.post("http://10.10.9.233:8080/internet_users", formdata)
+    return axios.post("/internet_users", formdata)
 }
 
 export function queryBarsInfo(obj = {}){
@@ -46,7 +46,7 @@ export function queryBarsInfo(obj = {}){
     if (endTime) formdata.set("endTime", endTime)
     if (ageTime) formdata.set("ageTime", ageTime)
 
-    return axios.post("http://10.10.9.233:8080/filterinfo", formdata)
+    return axios.post("/filterinfo", formdata)
 }
 
 export function queryInternetTimeDistribution(obj = {}){
@@ -65,7 +65,7 @@ export function queryInternetTimeDistribution(obj = {}){
     if (barIds) formdata.set("barIds", barIds)
     if (ageTime) formdata.set("ageTime", ageTime)
 
-    return axios.post("http://10.10.9.233:8080/internet-time-distribution", formdata)
+    return axios.post("/internet-time-distribution", formdata)
 }
 
 export function queryAgeCount(obj = {}){
@@ -84,7 +84,7 @@ export function queryAgeCount(obj = {}){
     if (barIds) formdata.set("barIds", barIds)
     if (ageTime) formdata.set("ageTime", ageTime)
 
-    return axios.post("http://10.10.9.233:8080/age-count", formdata)
+    return axios.post("/age-count", formdata)
 }
 
 export function queryProvinceUsercount(obj = {}){
@@ -103,7 +103,7 @@ export function queryProvinceUsercount(obj = {}){
     if (barIds) formdata.set("barIds", barIds)
     if (ageTime) formdata.set("ageTime", ageTime)
 
-    return axios.post("http://10.10.9.233:8080/province-usercount", formdata)
+    return axios.post("/province-usercount", formdata)
 }
 
 export function queryPersonTimeCount(obj = {}){
@@ -124,7 +124,7 @@ export function queryPersonTimeCount(obj = {}){
     if (endTime) formdata.set("endTime", endTime)
     if (barIds) formdata.set("barIds", barIds)
 
-    return axios.post("http://10.10.9.233:8080/age_time", formdata)
+    return axios.post("/age_time", formdata)
 }
 
 export function exportData(obj = {}){
@@ -135,7 +135,7 @@ export function exportData(obj = {}){
         ageTime
     } = obj
 
-    window.open(`http://10.10.9.233:8080/export-data?${querystring.stringify({
+    window.open(`/export-data?${querystring.stringify({
         startTime,
         endTime,
         barIds,

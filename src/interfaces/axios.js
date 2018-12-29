@@ -1,7 +1,7 @@
 const axios = require("axios")
 
 let instance = axios.create({
-    baseURL: "http://127.0.0.1:3000/",
+    baseURL: "http://10.10.9.233:8080",
     timeout: 3000
 })
 

@@ -47,7 +47,7 @@ export default {
         eventBus.$on("timeRangeUpdate", this.updateChart)
         eventBus.$on("selectedBarsUpdate", this.updateChart)
         eventBus.$on("ageInternetTimeRangeUpdate", this.updateChart)
-        eventBus.$on("typeUpdate", this.update)
+        eventBus.$on("typeUpdate", this.updateChart)
 
         this.initChart()
         this.updateChart()
